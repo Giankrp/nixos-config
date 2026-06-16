@@ -1,6 +1,10 @@
 { config, pkgs, ... }:
 
 {
+  # Global Catppuccin theme configuration
+  catppuccin.enable = true;
+  catppuccin.flavor = "mocha";
+
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home.username = "gian";
@@ -91,6 +95,10 @@
 
   # Fastfetch configuration and ASCII logo
   xdg.configFile."fastfetch/logo.txt".text = ''
+
+
+
+
   ⠄⠄⠄⢰⣧⣼⣯⠄⣸⣠⣶⣶⣦⣾⠄⠄⠄⠄⡀⠄⢀⣿⣿⠄⠄⠄⢸⡇⠄⠄
   ⠄⠄⠄⣾⣿⠿⠿⠶⠿⢿⣿⣿⣿⣿⣦⣤⣄⢀⡅⢠⣾⣛⡉⠄⠄⠄⠸⢀⣿⠄
   ⠄⠄⢀⡋⣡⣴⣶⣶⡀⠄⠄⠙⢿⣿⣿⣿⣿⣿⣴⣿⣿⣿⢃⣤⣄⣀⣥⣿⣿⠄
