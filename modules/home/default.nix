@@ -17,6 +17,7 @@
   # User packages
   home.packages = with pkgs; [
     satty
+    ags
   ];
 
   # Add directories to PATH
@@ -281,4 +282,143 @@
 
   # Link Niri configuration file
   xdg.configFile."niri/config.kdl".source = ./niri.kdl;
+
+  # AGS (Aylur's GTK Shell) configuration files
+  xdg.configFile."ags/config.js".text = ''
+    import App from 'resource:///com/github/aylur/ags/app.js';
+    import Widget from 'resource:///com/github/aylur/ags/widget.js';
+    import Audio from 'resource:///com/github/aylur/ags/service/audio.js';
+    import Battery from 'resource:///com/github/aylur/ags/service/battery.js';
+
+    // Clock Widget
+    const Clock = () => Widget.Label({
+        className: 'clock',
+        setup: self => self.poll(1000, self => {
+            const date = new Date();
+            self.label = date.toLocaleDateString('es-ES', {
+                weekday: 'short',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+            });
+        }),
+    });
+
+    // Battery Widget
+    const BatteryLabel = () => Widget.Box({
+        className: 'battery',
+        visible: Battery.bind('available'),
+        children: [
+            Widget.Icon({
+                icon: Battery.bind('icon_name'),
+            }),
+            Widget.Label({
+                label: Battery.bind('percent').as(p => ` ''${p}%`),
+            }),
+        ],
+    });
+
+    // Volume Widget
+    const Volume = () => Widget.Box({
+        className: 'volume',
+        children: [
+            Widget.Icon({
+                icon: Audio.speaker.bind('volume').as(v => {
+                    if (v === 0) return 'audio-volume-muted-symbolic';
+                    if (v < 0.33) return 'audio-volume-low-symbolic';
+                    if (v < 0.66) return 'audio-volume-medium-symbolic';
+                    return 'audio-volume-high-symbolic';
+                }),
+            }),
+            Widget.Label({
+                label: Audio.speaker.bind('volume').as(v => ` ''${Math.round(v * 100)}%`),
+            }),
+        ],
+    });
+
+    const Left = () => Widget.Box({
+        spacing: 8,
+        children: [
+            Widget.Label({
+                className: 'logo',
+                label: '❄️ NixOS',
+            }),
+        ],
+    });
+
+    const Center = () => Widget.Box({
+        spacing: 8,
+        children: [
+            Clock(),
+        ],
+    });
+
+    const Right = () => Widget.Box({
+        hpack: 'end',
+        spacing: 12,
+        children: [
+            Volume(),
+            BatteryLabel(),
+        ],
+    });
+
+    const Bar = (monitor = 0) => Widget.Window({
+        name: `bar-''${monitor}`,
+        className: 'bar',
+        monitor,
+        anchor: ['top', 'left', 'right'],
+        exclusivity: 'exclusive',
+        child: Widget.CenterBox({
+            startWidget: Left(),
+            centerWidget: Center(),
+            endWidget: Right(),
+        }),
+    });
+
+    App.config({
+        style: App.configDir + '/style.css',
+        windows: [
+            Bar(0),
+        ],
+    });
+  '';
+
+  xdg.configFile."ags/style.css".text = ''
+    * {
+        font-family: "CaskaydiaCove Nerd Font", sans-serif;
+        font-size: 13px;
+    }
+
+    window.bar {
+        background-color: #1e1e2e;
+        border-bottom: 2px solid #cba6f7;
+        color: #cdd6f4;
+    }
+
+    .logo {
+        color: #89b4fa;
+        font-weight: bold;
+        margin-left: 15px;
+        padding: 6px 0;
+    }
+
+    .clock {
+        color: #f5c2e7;
+        font-weight: bold;
+        padding: 6px 0;
+    }
+
+    .volume {
+        color: #a6e3a1;
+        margin-right: 15px;
+        padding: 6px 0;
+    }
+
+    .battery {
+        color: #f9e2af;
+        margin-right: 15px;
+        padding: 6px 0;
+    }
+  '';
 }
