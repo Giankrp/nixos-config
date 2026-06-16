@@ -4,6 +4,7 @@
   # Global Catppuccin theme configuration
   catppuccin.enable = true;
   catppuccin.flavor = "mocha";
+  catppuccin.autoEnable = true;
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
@@ -239,4 +240,18 @@
     ]
 }
   '';
+
+  # Git configuration managed by Home Manager
+  programs.git = {
+    enable = true;
+    settings = {
+      user = {
+        name = "Giankrp";
+        email = "gianruzi2003@gmail.com";
+      };
+      safe = {
+        directory = "/etc/nixos";
+      };
+    };
+  };
 }
