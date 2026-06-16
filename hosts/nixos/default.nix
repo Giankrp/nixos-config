@@ -137,6 +137,10 @@
      ripgrep
      fd
      gcc
+     ffmpeg
+     poppler
+     resvg
+     imagemagick
      gnumake
      tree-sitter
      docker
@@ -147,6 +151,7 @@
      postgresql
      zsh
      lazygit
+     yazi
      fzf
      lsd
      starship

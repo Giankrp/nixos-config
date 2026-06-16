@@ -23,6 +23,8 @@
   # Define environment variables
   home.sessionVariables = {
     PNPM_HOME = "$HOME/.local/share/pnpm/bin";
+    EDITOR = "nvim";
+    VISUAL = "nvim";
   };
 
   # Let Home Manager install and manage itself.
