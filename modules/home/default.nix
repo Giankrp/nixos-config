@@ -14,6 +14,11 @@
   # Match the release version of your system
   home.stateVersion = "26.05";
 
+  # User packages
+  home.packages = with pkgs; [
+    satty
+  ];
+
   # Add directories to PATH
   home.sessionPath = [
     "$HOME/.local/bin"
