@@ -38,6 +38,7 @@
     shellAliases = {
       v = "nvim";
       gs = "git status";
+      ls = "lsd";
     };
 
     initContent = ''
@@ -270,4 +271,7 @@
       shell = "zsh";
     };
   };
+
+  # Link Niri configuration file
+  xdg.configFile."niri/config.kdl".source = ./niri.kdl;
 }

@@ -148,6 +148,7 @@
      zsh
      lazygit
      fzf
+     lsd
      starship
      fastfetch
   ];
