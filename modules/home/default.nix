@@ -254,4 +254,20 @@
       };
     };
   };
+
+  # Kitty configuration managed by Home Manager
+  programs.kitty = {
+    enable = true;
+    font = {
+      name = "CaskaydiaCove NF SemiBold";
+      size = 13;
+    };
+    settings = {
+      bold_font = "auto";
+      italic_font = "auto";
+      bold_italic_font = "auto";
+      hide_window_decorations = "yes";
+      shell = "zsh";
+    };
+  };
 }
