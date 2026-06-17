@@ -17,7 +17,7 @@
   # User packages
   home.packages = with pkgs; [
     satty
-    ags_1
+    ags
   ];
 
   # Add directories to PATH
@@ -284,103 +284,43 @@
   xdg.configFile."niri/config.kdl".source = ./niri.kdl;
 
   # AGS (Aylur's GTK Shell) configuration files
-  xdg.configFile."ags/config.js".text = ''
-    import App from 'resource:///com/github/aylur/ags/app.js';
-    import Widget from 'resource:///com/github/aylur/ags/widget.js';
-    import Audio from 'resource:///com/github/aylur/ags/service/audio.js';
-    import Battery from 'resource:///com/github/aylur/ags/service/battery.js';
+  xdg.configFile."ags/app.js".text = ''
+    import { App, Astal } from "astal/gtk3";
+    import { Variable } from "astal";
 
-    // Clock Widget
-    const Clock = () => Widget.Label({
-        className: 'clock',
-        setup: self => self.poll(1000, self => {
-            const date = new Date();
-            self.label = date.toLocaleDateString('es-ES', {
-                weekday: 'short',
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-            });
-        }),
-    });
+    // Reactive time variable, updates every second using the date command
+    const time = Variable("").poll(1000, 'date "+%a %b %d, %H:%M"');
 
-    // Battery Widget
-    const BatteryLabel = () => Widget.Box({
-        className: 'battery',
-        visible: Battery.bind('available'),
-        children: [
-            Widget.Icon({
-                icon: Battery.bind('icon_name'),
-            }),
-            Widget.Label({
-                label: Battery.bind('percent').as(p => ` ''${p}%`),
-            }),
-        ],
-    });
+    function Bar(monitor = 0) {
+        const { TOP, LEFT, RIGHT } = Astal.WindowAnchor;
 
-    // Volume Widget
-    const Volume = () => Widget.Box({
-        className: 'volume',
-        children: [
-            Widget.Icon({
-                icon: Audio.speaker.bind('volume').as(v => {
-                    if (v === 0) return 'audio-volume-muted-symbolic';
-                    if (v < 0.33) return 'audio-volume-low-symbolic';
-                    if (v < 0.66) return 'audio-volume-medium-symbolic';
-                    return 'audio-volume-high-symbolic';
-                }),
-            }),
-            Widget.Label({
-                label: Audio.speaker.bind('volume').as(v => ` ''${Math.round(v * 100)}%`),
-            }),
-        ],
-    });
+        return (
+            <window
+                className="bar"
+                monitor={monitor}
+                exclusivity="exclusive"
+                anchor={TOP | LEFT | RIGHT}
+            >
+                <centerbox>
+                    <box className="left">
+                        <label className="logo" label="❄️ NixOS" />
+                    </box>
+                    <box className="center">
+                        <label className="clock" label={time()} />
+                    </box>
+                    <box className="right" hpack="end">
+                        <label className="status" label="Active" />
+                    </box>
+                </centerbox>
+            </window>
+        );
+    }
 
-    const Left = () => Widget.Box({
-        spacing: 8,
-        children: [
-            Widget.Label({
-                className: 'logo',
-                label: '❄️ NixOS',
-            }),
-        ],
-    });
-
-    const Center = () => Widget.Box({
-        spacing: 8,
-        children: [
-            Clock(),
-        ],
-    });
-
-    const Right = () => Widget.Box({
-        hpack: 'end',
-        spacing: 12,
-        children: [
-            Volume(),
-            BatteryLabel(),
-        ],
-    });
-
-    const Bar = (monitor = 0) => Widget.Window({
-        name: `bar-''${monitor}`,
-        className: 'bar',
-        monitor,
-        anchor: ['top', 'left', 'right'],
-        exclusivity: 'exclusive',
-        child: Widget.CenterBox({
-            startWidget: Left(),
-            centerWidget: Center(),
-            endWidget: Right(),
-        }),
-    });
-
-    App.config({
-        style: App.configDir + '/style.css',
-        windows: [
-            Bar(0),
-        ],
+    App.start({
+        css: App.configDir + "/style.css",
+        main: () => {
+            App.add_window(Bar(0));
+        }
     });
   '';
 
@@ -409,14 +349,8 @@
         padding: 6px 0;
     }
 
-    .volume {
+    .status {
         color: #a6e3a1;
-        margin-right: 15px;
-        padding: 6px 0;
-    }
-
-    .battery {
-        color: #f9e2af;
         margin-right: 15px;
         padding: 6px 0;
     }
