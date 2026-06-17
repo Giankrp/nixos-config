@@ -17,7 +17,7 @@
   # User packages
   home.packages = with pkgs; [
     satty
-    ags
+    ags_1
   ];
 
   # Add directories to PATH
