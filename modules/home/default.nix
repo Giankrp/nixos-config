@@ -17,7 +17,11 @@
   # User packages
   home.packages = with pkgs; [
     satty
-    ags
+    (ags.override {
+      extraPackages = [
+        astal.apps
+      ];
+    })
   ];
 
   # Add directories to PATH
