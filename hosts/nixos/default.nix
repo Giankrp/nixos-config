@@ -173,6 +173,7 @@
 
        exec ${pkgs.davinci-resolve}/bin/davinci-resolve "$@"
      ''))
+     xwayland-satellite
      davinci-resolve
      clinfo
   ];
