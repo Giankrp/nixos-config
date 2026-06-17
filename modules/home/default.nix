@@ -294,23 +294,51 @@
     const wifiRaw = Variable("").poll(5000, ["sh", "-c", "nmcli -t -f ACTIVE,SSID dev wifi 2>/dev/null | grep '^yes' | cut -d: -f2 || true"]);
     const cpuRaw = Variable("").poll(2000, ["sh", "-c", "top -bn1 | grep 'Cpu(s)' | sed 's/.*, *\\([0-9.]*\\)%* id.*/\\1/' | awk '{print 100 - $1}'"]);
     const ramRaw = Variable("").poll(2000, ["sh", "-c", "free -m | awk '/Mem:/ {printf \"%d\", $3/$2*100}'"]);
-    const workspacesRaw = Variable("[]").poll(1000, ["sh", "-c", "niri msg -j workspaces 2>/dev/null || echo '[]'"]);
+    const niriStateRaw = Variable('{"workspaces":[],"windows":[]}').poll(500, ["sh", "-c", "echo \"{ \\\"workspaces\\\": $(niri msg -j workspaces 2>/dev/null || echo '[]'), \\\"windows\\\": $(niri msg -j windows 2>/dev/null || echo '[]') }\""]);
+
+    const getAppIcon = (appId) => {
+        if (!appId) return "󰖲";
+        const id = appId.toLowerCase();
+        if (id.includes("firefox")) return "󰈹";
+        if (id.includes("chrome") || id.includes("chromium")) return "󰊯";
+        if (id.includes("kitty") || id.includes("alacritty") || id.includes("terminal") || id.includes("wezterm")) return "";
+        if (id.includes("code") || id.includes("visual-studio")) return "󰨞";
+        if (id.includes("nvim") || id.includes("neovim")) return "";
+        if (id.includes("discord") || id.includes("vesktop")) return "󰙯";
+        if (id.includes("spotify")) return "󰓇";
+        if (id.includes("steam")) return "󰓓";
+        if (id.includes("nautilus") || id.includes("thunar") || id.includes("dolphin") || id.includes("yazi")) return "󰉋";
+        if (id.includes("slack")) return "󰒱";
+        if (id.includes("telegram")) return "󰔗";
+        if (id.includes("thunderbird")) return "󰻧";
+        return "󰖲";
+    };
 
     function Workspaces() {
         return (
             <box className="workspaces">
-                {bind(workspacesRaw).as(raw => {
+                {bind(niriStateRaw).as(raw => {
                     try {
-                        const list = JSON.parse(raw);
-                        if (!Array.isArray(list)) return [];
-                        list.sort((a, b) => a.idx - b.idx);
-                        return list.map(ws => {
-                            let className = "workspace-dot";
-                            if (ws.is_focused) className += " focused";
-                            else if (ws.active_window_id !== null) className += " active";
+                        const state = JSON.parse(raw);
+                        const workspaces = state.workspaces || [];
+                        const windows = state.windows || [];
+                        
+                        if (!Array.isArray(workspaces) || workspaces.length === 0) {
+                            return [<label label="•" />];
+                        }
+                        
+                        workspaces.sort((a, b) => a.idx - b.idx);
+                        
+                        return workspaces.map(ws => {
+                            const wsWindows = windows.filter(w => w.workspace_id === ws.id);
                             
-                            let label = "•";
-                            if (ws.is_focused) label = "●";
+                            let className = "workspace-pill";
+                            if (ws.is_focused) className += " focused";
+                            else if (wsWindows.length > 0) className += " active";
+                            else className += " empty";
+                            
+                            const icons = wsWindows.map(w => getAppIcon(w.app_id));
+                            const uniqueIcons = [...new Set(icons)];
                             
                             return (
                                 <button
@@ -319,7 +347,16 @@
                                         execAsync(`niri msg action focus-workspace ` + ws.idx);
                                     }}
                                 >
-                                    <label label={label} />
+                                    <box className="workspace-content">
+                                        <label className="workspace-index" label={ws.idx.toString()} />
+                                        {uniqueIcons.length > 0 && (
+                                            <box className="workspace-icons">
+                                                {uniqueIcons.map(icon => (
+                                                    <label className="workspace-icon" label={` ` + icon} />
+                                                ))}
+                                            </box>
+                                        )}
+                                    </box>
                                 </button>
                             );
                         });
@@ -465,25 +502,48 @@
         margin-left: 4px;
     }
 
-    button.workspace-dot {
-        background: none;
-        border: none;
-        box-shadow: none;
-        padding: 0 4px;
-        margin: 0;
-        color: #45475a;
+    button.workspace-pill {
+        background-color: rgba(24, 24, 37, 0.4);
+        border: 1px solid #313244;
+        border-radius: 8px;
+        padding: 4px 10px;
+        margin: 2px 4px;
+        color: #7f849c;
+        transition: all 0.2s ease;
     }
 
-    button.workspace-dot:hover {
-        color: #f5c2e7;
+    button.workspace-pill:hover {
+        background-color: rgba(49, 50, 68, 0.6);
+        color: #cdd6f4;
+        border-color: #cba6f7;
     }
 
-    button.workspace-dot.active {
+    button.workspace-pill.active {
         color: #b4befe;
+        border-color: #45475a;
     }
 
-    button.workspace-dot.focused {
-        color: #cba6f7;
+    button.workspace-pill.focused {
+        background-color: #cba6f7;
+        color: #11111b;
+        border-color: #cba6f7;
+        font-weight: bold;
+    }
+
+    button.workspace-pill.focused label {
+        color: #11111b;
+    }
+
+    .workspace-index {
+        font-weight: bold;
+    }
+
+    .workspace-icons {
+        margin-left: 4px;
+    }
+
+    .workspace-icon {
+        font-size: 14px;
     }
 
     .clock-module {
