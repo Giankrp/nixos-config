@@ -285,6 +285,19 @@
     };
   };
 
+  # Mako notification daemon configuration
+  services.mako = {
+    enable = true;
+    settings = {
+      default-timeout = 5000;
+      font = "CaskaydiaCove NF SemiBold 11";
+      border-size = 2;
+      border-radius = 12;
+      padding = "12,16";
+      margin = "12";
+    };
+  };
+
   # Link Niri configuration file
   xdg.configFile."niri/config.kdl".source = ./niri.kdl;
 
