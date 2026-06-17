@@ -8,6 +8,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     catppuccin.url = "github:catppuccin/nix";
+    spicetify-nix = {
+      url = "github:Gerg-L/spicetify-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, home-manager, catppuccin, ... }@inputs: {
@@ -19,8 +23,12 @@
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
+          home-manager.extraSpecialArgs = { inherit inputs; };
           home-manager.users.gian = import ./modules/home/default.nix;
-          home-manager.sharedModules = [ catppuccin.homeModules.catppuccin ];
+          home-manager.sharedModules = [
+            catppuccin.homeModules.catppuccin
+            inputs.spicetify-nix.homeManagerModules.default
+          ];
         }
       ];
     };

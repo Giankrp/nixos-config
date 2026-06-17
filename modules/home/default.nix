@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   # Global Catppuccin theme configuration
@@ -290,4 +290,19 @@
   # AGS (Aylur's GTK Shell) configuration files
   xdg.configFile."ags/app.js".source = ./ags/app.js;
   xdg.configFile."ags/style.css".source = ./ags/style.css;
+
+  programs.spicetify =
+    let
+      spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+    in {
+      enable = true;
+      theme = spicePkgs.themes.catppuccin;
+      colorScheme = "mocha";
+
+      enabledExtensions = with spicePkgs.extensions; [
+        adblock
+        hidePodcasts
+        shuffle
+      ];
+    };
 }
