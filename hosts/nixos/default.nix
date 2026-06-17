@@ -176,6 +176,8 @@
      xwayland-satellite
      davinci-resolve
      clinfo
+     zed-editor-fhs
+     opencode
   ];
   
   fonts.packages = with pkgs; [
