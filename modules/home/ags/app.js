@@ -440,7 +440,7 @@ function WallpaperPicker(monitor = 0) {
     const wallpapersList = Variable([]);
 
     const updateWallpapersList = () => {
-        execAsync(["sh", "-c", "ls /home/gian/Pictures/Wallpapers/*.{jpg,jpeg,png,webp} 2>/dev/null"])
+        execAsync(["sh", "-c", "find /home/gian/Pictures/Wallpapers -maxdepth 1 -type f \\( -name '*.jpg' -o -name '*.jpeg' -o -name '*.png' -o -name '*.webp' \\) 2>/dev/null"])
             .then(out => {
                 const list = out.split("\n").map(f => f.trim()).filter(f => f !== "");
                 wallpapersList.set(list);
