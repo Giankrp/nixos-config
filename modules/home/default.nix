@@ -496,8 +496,8 @@
                 name="calendar-popup"
                 className="calendar-popup"
                 monitor={monitor}
-                anchor={Astal.WindowAnchor.TOP}
-                margins={[54, 0, 0, 0]}
+                anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.LEFT | Astal.WindowAnchor.RIGHT}
+                margins={[58, 12, 0, 12]}
                 keymode="on-demand"
                 exclusivity={Astal.Exclusivity.IGNORE}
                 visible={false}
@@ -505,8 +505,10 @@
                     self.hide();
                 }}
             >
-                <box className="calendar-container" vertical={true} widthRequest={300} heightRequest={280}>
-                    <Gtk.Calendar visible={true} hexpand={true} vexpand={true} />
+                <box halign={Gtk.Align.CENTER}>
+                    <box className="calendar-container" vertical={true} widthRequest={300} heightRequest={280}>
+                        <Gtk.Calendar visible={true} hexpand={true} vexpand={true} />
+                    </box>
                 </box>
             </window>
         );
@@ -519,7 +521,7 @@
                 className="volume-popup"
                 monitor={monitor}
                 anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.RIGHT}
-                margins={[54, 12, 0, 0]}
+                margins={[58, 12, 0, 0]}
                 keymode="on-demand"
                 exclusivity={Astal.Exclusivity.IGNORE}
                 visible={false}
@@ -650,24 +652,28 @@
     }
 
     button.clock-module {
-        background-color: rgba(245, 194, 231, 0.15);
-        border-color: #f5c2e7;
-        color: #f5c2e7;
-        font-weight: bold;
+        background: rgba(203, 166, 247, 0.15) !important;
+        background-image: none !important;
+        border: 1px solid #cba6f7 !important;
         padding: 4px 12px;
         margin: 2px 4px;
         border-radius: 8px;
-        box-shadow: none;
+        box-shadow: none !important;
+        text-shadow: none !important;
     }
 
     button.clock-module:hover {
-        border-color: #cba6f7;
-        background-color: rgba(245, 194, 231, 0.25);
+        background: rgba(203, 166, 247, 0.3) !important;
+        border-color: #f5c2e7 !important;
     }
 
-    .clock {
+    button.clock-module label {
+        color: #cba6f7 !important;
         font-weight: bold;
-        color: #f5c2e7;
+    }
+
+    button.clock-module:hover label {
+        color: #f5c2e7 !important;
     }
 
     .mpris-module {
@@ -720,22 +726,27 @@
     }
 
     button.volume-module {
-        background-color: rgba(166, 227, 161, 0.15);
-        border-color: #a6e3a1;
-        color: #a6e3a1;
+        background: rgba(166, 227, 161, 0.15) !important;
+        background-image: none !important;
+        border: 1px solid #a6e3a1 !important;
         padding: 4px 12px;
         margin: 2px 4px;
         border-radius: 8px;
-        box-shadow: none;
+        box-shadow: none !important;
+        text-shadow: none !important;
     }
 
     button.volume-module:hover {
-        border-color: #a6e3a1;
-        background-color: rgba(166, 227, 161, 0.25);
+        background: rgba(166, 227, 161, 0.3) !important;
+        border-color: #89dceb !important;
     }
 
-    .volume {
-        color: #a6e3a1;
+    button.volume-module label {
+        color: #a6e3a1 !important;
+    }
+
+    button.volume-module:hover label {
+        color: #89dceb !important;
     }
 
     .battery-module {
@@ -753,12 +764,52 @@
     }
 
     window.calendar-popup {
-        margin-top: 54px;
+        margin-top: 58px;
     }
 
     window.volume-popup {
-        margin-top: 54px;
+        margin-top: 58px;
         margin-right: 12px;
+    }
+
+    /* Gtk.Calendar specific styles for Catppuccin */
+    calendar {
+        background-color: #1e1e2e;
+        color: #cdd6f4;
+        border: none;
+    }
+
+    calendar.header {
+        background-color: #1e1e2e;
+        color: #cba6f7;
+    }
+
+    calendar.button {
+        color: #cba6f7;
+        background: none;
+        background-image: none;
+        border: none;
+        box-shadow: none;
+    }
+
+    calendar.button:hover {
+        color: #f5c2e7;
+        background-color: rgba(203, 166, 247, 0.15);
+    }
+
+    calendar.view {
+        background-color: #181825;
+        color: #cdd6f4;
+    }
+
+    calendar:selected {
+        background-color: #cba6f7;
+        color: #11111b;
+        border-radius: 4px;
+    }
+
+    calendar:highlighted {
+        color: #f5c2e7;
     }
 
     .volume-popup-container {
