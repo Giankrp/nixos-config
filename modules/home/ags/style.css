@@ -439,7 +439,6 @@ button.picker-close-btn {
 
 button.picker-close-btn:hover {
     color: #f5e0dc; /* Flamingo */
-    transform: scale(1.1);
 }
 
 .picker-scroll {
@@ -469,7 +468,6 @@ button.wallpaper-card {
 button.wallpaper-card:hover {
     border-color: #cba6f7;
     background-color: rgba(203, 166, 247, 0.1);
-    transform: translateY(-2px);
 }
 
 .wallpaper-card-content {
