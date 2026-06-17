@@ -5,6 +5,7 @@
   catppuccin.enable = true;
   catppuccin.flavor = "mocha";
   catppuccin.autoEnable = true;
+  catppuccin.zed.enable = false;
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
@@ -320,4 +321,289 @@
         shuffle
       ];
     };
+
+  programs.zed-editor = {
+    enable = true;
+    package = pkgs.zed-editor-fhs;
+    
+    extensions = [
+      "nix"
+      "catppuccin"
+      "golang"
+      "vue"
+      "html"
+      "tailwind"
+    ];
+
+    userSettings = {
+      semantic_tokens = "combined";
+      code_lens = "on";
+      jsx_tag_auto_close = {
+        enabled = true;
+      };
+      cli_default_open_behavior = "existing_window";
+      outline_panel = {
+        dock = "right";
+      };
+      collaboration_panel = {
+        dock = "right";
+      };
+      agent = {
+        sidebar_side = "left";
+        favorite_models = [ ];
+        model_parameters = [ ];
+        dock = "right";
+      };
+      colorize_brackets = true;
+      inlay_hints = {
+        enabled = false;
+        show_background = false;
+      };
+      toolbar = {
+        code_actions = false;
+        breadcrumbs = true;
+        selections_menu = false;
+      };
+      git_panel = {
+        dock = "right";
+        tree_view = true;
+      };
+      disable_ai = false;
+      project_panel = {
+        drag_and_drop = true;
+        sticky_scroll = true;
+        starts_open = true;
+        git_status = true;
+        file_icons = true;
+        hide_gitignore = false;
+        auto_open = {
+          on_drop = true;
+        };
+        hide_hidden = false;
+        hide_root = false;
+        bold_folder_labels = false;
+        auto_fold_dirs = false;
+        auto_reveal_entries = true;
+        folder_icons = true;
+        diagnostic_badges = true;
+        git_status_indicator = true;
+        dock = "right";
+      };
+      preview_tabs = {
+        enable_preview_from_file_finder = true;
+      };
+      tabs = {
+        show_diagnostics = "all";
+        file_icons = true;
+        git_status = true;
+      };
+      tab_bar = {
+        show = false;
+      };
+      pane_split_direction_vertical = "right";
+      relative_line_numbers = "enabled";
+      gutter = {
+        line_numbers = true;
+      };
+      which_key = {
+        enabled = true;
+      };
+      agent_servers = {
+        opencode = {
+          default_config_options = {
+            model = "opencode/mimo-v2.5-free";
+          };
+          type = "registry";
+        };
+        gemini = {
+          type = "registry";
+        };
+      };
+      diagnostics = {
+        inline = {
+          enabled = true;
+        };
+      };
+      document_symbols = "off";
+      completion_menu_item_kind = "symbol";
+      icon_theme = {
+        mode = "dark";
+        light = "Catppuccin Latte";
+        dark = "Catppuccin Latte";
+      };
+      vim_mode = true;
+      ui_font_size = 16;
+      buffer_font_size = 17;
+      theme = {
+        mode = "dark";
+        light = "Catppuccin Mocha";
+        dark = "Catppuccin Mocha";
+      };
+      theme_overrides = {
+        "Catppuccin Mocha" = {
+          hint = "#89dceb";
+          info = "#cba6f7";
+          border = "#1e1e2e";
+          "border.variant" = "#1e1e2e";
+        };
+      };
+      scrollbar = {
+        show = "never";
+      };
+      cursor_blink = false;
+      ui_font_family = "CaskaydiaCove Nerd Font";
+      ui_font_weight = 700;
+      buffer_font_family = "CaskaydiaCove Nerd Font";
+      buffer_font_weight = 900;
+      buffer_line_height = "comfortable";
+      buffer_font_features = {
+        calt = true;
+        zero = true;
+        cv01 = true;
+      };
+      file_finder = {
+        modal_max_width = "xlarge";
+      };
+      soft_wrap = "editor_width";
+      
+      lsp = {
+        gopls = {
+          initialization_options = {
+            staticcheck = true;
+            gofumpt = true;
+            analyses = {
+              nilness = true;
+              unusedwrite = true;
+              shadow = true;
+              useany = true;
+            };
+            hints = {
+              assignVariableTypes = true;
+              compositeLiteralFields = true;
+              compositeLiteralTypes = true;
+              constantValues = true;
+              functionTypeParameters = true;
+              parameterNames = true;
+              rangeVariableTypes = true;
+            };
+          };
+        };
+        golangci-lint = {
+          initialization_options = {
+            command = [
+              "golangci-lint"
+              "run"
+              "--output.json.path"
+              "stdout"
+              "--show-stats=false"
+              "--output.text.path="
+            ];
+          };
+        };
+        oxlint = {
+          initialization_options = {
+            settings = {
+              configPath = null;
+              run = "onType";
+              disableNestedConfig = false;
+              fixKind = "safe_fix";
+              unusedDisableDirectives = "deny";
+            };
+          };
+        };
+        oxfmt = {
+          initialization_options = {
+            settings = {
+              "fmt.configPath" = null;
+              run = "onSave";
+            };
+          };
+        };
+        tailwindcss-language-server = {
+          settings = {
+            classFunctions = [ "cva" "cx" ];
+            includeLanguages = {
+              vue = "html";
+            };
+            experimental = {
+              classRegex = [
+                "(?:cls|className|\\w*Classes\\w*)\\s*(?:=|:)\\s*['\"`]([^'\"`]*)['\"`]"
+                "\\.className\\s*\\+?=\\s*['\"]([^'\"]*)['\"]"
+                "\\.setAttribute(?:NS)?\\([^)]*?['\"]class['\"],\\s*['\"]([^'\"]*)['\"]"
+                "\\.classList\\.(?:add|remove|toggle|contains)\\(([^)]*)\\)"
+                "\\.classList\\.replace\\(([^)]*)\\)"
+                "\\b\\w*Classes\\w*\\s*=\\s*\\{([\\s\\S]*?)\\}"
+                "class=\"([^\"]*)\""
+                "class='([^']*)'"
+                ":class=\"([^\"]*)\""
+                ":class='([^']*)'"
+              ];
+            };
+          };
+        };
+        vue = {
+          settings = {
+            "vue.inlayHints.inlineHandlerLeading" = true;
+            "vue.inlayHints.missingProps" = true;
+            "vue.inlayHints.optionsWrapper" = true;
+            "vue.inlayHints.vBindShorthand" = true;
+          };
+        };
+      };
+
+      languages = {
+        Go = {
+          language_servers = [ "gopls" "golangci-lint" ];
+          inlay_hints = {
+            enabled = true;
+          };
+        };
+        TypeScript = {
+          language_servers = [
+            "!typescript-language-server"
+            "angular"
+            "vtsls"
+          ];
+          format_on_save = "on";
+          prettier = {
+            allowed = false;
+          };
+          formatter = [
+            {
+              language_server = {
+                name = "oxfmt";
+              };
+            }
+          ];
+        };
+        JavaScript = {
+          format_on_save = "on";
+          prettier = {
+            allowed = false;
+          };
+          formatter = [
+            {
+              language_server = {
+                name = "oxc";
+              };
+            }
+            {
+              code_action = "source.fixAll.oxc";
+            }
+          ];
+        };
+        "Vue.js" = {
+          language_servers = [
+            "vue-language-server"
+            "!typescript-language-server"
+            "tailwindcss-language-server"
+            "vtsls"
+          ];
+        };
+        HTML = {
+          language_servers = [ "angular" "..." ];
+        };
+      };
+    };
+  };
 }
