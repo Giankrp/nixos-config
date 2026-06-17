@@ -506,7 +506,7 @@
                 }}
             >
                 <box className="calendar-container" vertical={true} widthRequest={300} heightRequest={280}>
-                    <Gtk.Calendar hexpand={true} vexpand={true} />
+                    <Gtk.Calendar visible={true} hexpand={true} vexpand={true} />
                 </box>
             </window>
         );
@@ -565,6 +565,9 @@
     window {
         background-color: transparent;
         background: none;
+    }
+
+    window.bar-window {
         margin: 8px 12px 0 12px;
     }
 
