@@ -209,15 +209,16 @@ function CalendarPopup(monitor = 0) {
             name="calendar-popup"
             className="calendar-popup"
             monitor={monitor}
-            anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.LEFT | Astal.WindowAnchor.RIGHT}
-            margins={[58, 12, 0, 12]}
+            anchor={Astal.WindowAnchor.TOP}
+            margins={[58, 0, 0, 0]}
+            marginTop={58}
+            margin_top={58}
+            margin-top={58}
             exclusivity={Astal.Exclusivity.IGNORE}
             visible={false}
         >
-            <box halign={Gtk.Align.CENTER}>
-                <box className="calendar-container" vertical={true} widthRequest={300} heightRequest={280}>
-                    <Gtk.Calendar visible={true} hexpand={true} vexpand={true} />
-                </box>
+            <box className="calendar-container" vertical={true} widthRequest={300} heightRequest={280}>
+                <Gtk.Calendar visible={true} hexpand={true} vexpand={true} />
             </box>
         </window>
     );
@@ -231,6 +232,12 @@ function VolumePopup(monitor = 0) {
             monitor={monitor}
             anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.RIGHT}
             margins={[58, 12, 0, 0]}
+            marginTop={58}
+            margin_top={58}
+            margin-top={58}
+            marginRight={12}
+            margin_right={12}
+            margin-right={12}
             exclusivity={Astal.Exclusivity.IGNORE}
             visible={false}
         >
