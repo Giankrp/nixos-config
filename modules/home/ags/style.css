@@ -1,0 +1,281 @@
+* {
+    font-family: "CaskaydiaCove Nerd Font", sans-serif;
+    font-size: 13px;
+}
+
+window {
+    background-color: transparent;
+    background-image: none;
+}
+
+window.bar-window {
+    margin: 8px 12px 0 12px;
+}
+
+.bar-container {
+    background-color: rgba(30, 30, 46, 0.85);
+    border: 1px solid #313244;
+    border-radius: 12px;
+    padding: 4px 8px;
+    color: #cdd6f4;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.module {
+    background-color: #181825;
+    border: 1px solid #313244;
+    border-radius: 8px;
+    padding: 4px 12px;
+    margin: 2px 4px;
+    color: #cdd6f4;
+}
+
+.logo-module {
+    background-color: rgba(137, 180, 250, 0.15);
+    border-color: #89b4fa;
+    color: #89b4fa;
+    font-weight: bold;
+}
+
+.logo {
+    font-weight: bold;
+    color: #89b4fa;
+}
+
+.workspaces {
+    margin-left: 4px;
+}
+
+button.workspace-pill {
+    background-color: rgba(24, 24, 37, 0.4);
+    border: 1px solid #313244;
+    border-radius: 8px;
+    padding: 4px 10px;
+    margin: 2px 4px;
+    color: #7f849c;
+    transition: all 0.2s ease;
+}
+
+button.workspace-pill:hover {
+    background-color: rgba(49, 50, 68, 0.6);
+    color: #cdd6f4;
+    border-color: #cba6f7;
+}
+
+button.workspace-pill.active {
+    color: #b4befe;
+    border-color: #45475a;
+}
+
+button.workspace-pill.focused {
+    background-color: #cba6f7;
+    color: #11111b;
+    border-color: #cba6f7;
+    font-weight: bold;
+}
+
+button.workspace-pill.focused label {
+    color: #11111b;
+}
+
+.workspace-index {
+    font-weight: bold;
+}
+
+.workspace-icons {
+    margin-left: 4px;
+}
+
+.workspace-icon {
+    font-size: 14px;
+}
+
+button.clock-module {
+    background-color: rgba(203, 166, 247, 0.15);
+    background-image: none;
+    border: 1px solid #cba6f7;
+    padding: 4px 12px;
+    margin: 2px 4px;
+    border-radius: 8px;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+button.clock-module:hover {
+    background-color: rgba(203, 166, 247, 0.3);
+    border-color: #f5c2e7;
+}
+
+button.clock-module label {
+    color: #cba6f7;
+    font-weight: bold;
+}
+
+button.clock-module:hover label {
+    color: #f5c2e7;
+}
+
+.mpris-module {
+    background-color: rgba(180, 190, 254, 0.15);
+    border-color: #b4befe;
+    color: #b4befe;
+}
+
+.mpris-icon {
+    color: #b4befe;
+}
+
+.mpris-text {
+    font-weight: bold;
+    color: #b4befe;
+}
+
+.mpris-controls {
+    margin-left: 8px;
+}
+
+button.mpris-btn {
+    background-color: transparent;
+    background-image: none;
+    border: none;
+    box-shadow: none;
+    color: #b4befe;
+    padding: 0 4px;
+    margin: 0;
+}
+
+button.mpris-btn:hover {
+    color: #cdd6f4;
+}
+
+.cpu-ram-module {
+    color: #f9e2af;
+}
+
+.cpu {
+    color: #f9e2af;
+    margin-right: 8px;
+}
+
+.ram {
+    color: #f38ba8;
+}
+
+.wifi-module {
+    color: #89dceb;
+}
+
+button.volume-module {
+    background-color: rgba(166, 227, 161, 0.15);
+    background-image: none;
+    border: 1px solid #a6e3a1;
+    padding: 4px 12px;
+    margin: 2px 4px;
+    border-radius: 8px;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+button.volume-module:hover {
+    background-color: rgba(166, 227, 161, 0.3);
+    border-color: #89dceb;
+}
+
+button.volume-module label {
+    color: #a6e3a1;
+}
+
+button.volume-module:hover label {
+    color: #89dceb;
+}
+
+.battery-module {
+    color: #fab387;
+}
+
+/* Styling popups */
+.calendar-container, .volume-popup-container {
+    background-color: #1e1e2e;
+    border: 2px solid #cba6f7;
+    border-radius: 12px;
+    padding: 12px;
+    color: #cdd6f4;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+}
+
+window.calendar-popup {
+    margin-top: 58px;
+}
+
+window.volume-popup {
+    margin-top: 58px;
+    margin-right: 12px;
+}
+
+/* Gtk.Calendar specific styles for Catppuccin */
+calendar {
+    background-color: #1e1e2e;
+    color: #cdd6f4;
+    border: none;
+}
+
+calendar.header {
+    background-color: #1e1e2e;
+    color: #cba6f7;
+}
+
+calendar.button {
+    color: #cba6f7;
+    background-color: transparent;
+    background-image: none;
+    border: none;
+    box-shadow: none;
+}
+
+calendar.button:hover {
+    color: #f5c2e7;
+    background-color: rgba(203, 166, 247, 0.15);
+}
+
+calendar.view {
+    background-color: #181825;
+    color: #cdd6f4;
+}
+
+calendar.view:selected {
+    background-color: #cba6f7;
+    color: #11111b;
+    border-radius: 4px;
+}
+
+.volume-popup-container {
+    border-color: #a6e3a1;
+}
+
+.volume-popup-header {
+    margin-bottom: 8px;
+}
+
+.volume-popup-title {
+    font-weight: bold;
+    color: #a6e3a1;
+}
+
+scale.volume-slider trough {
+    background-color: #313244;
+    border-radius: 4px;
+    min-height: 8px;
+}
+
+scale.volume-slider highlight {
+    background-color: #a6e3a1;
+    border-radius: 4px;
+}
+
+scale.volume-slider slider {
+    background-color: #cdd6f4;
+    border-radius: 50%;
+    min-width: 14px;
+    min-height: 14px;
+    margin: -3px 0;
+}
