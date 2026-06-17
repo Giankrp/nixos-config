@@ -24,6 +24,17 @@
         astal.apps
       ];
     })
+
+    # Go development tools (LSPs, linters, formatters)
+    gopls
+    golangci-lint
+    gofumpt
+
+    # Web development language servers (LSP/Formatters/Linters)
+    vtsls
+    vue-language-server
+    tailwindcss-language-server
+    angular-language-server
   ];
 
   # Add directories to PATH
