@@ -566,7 +566,7 @@
 
     window {
         background-color: transparent;
-        background: none;
+        background-image: none;
     }
 
     window.bar-window {
@@ -652,28 +652,28 @@
     }
 
     button.clock-module {
-        background: rgba(203, 166, 247, 0.15) !important;
-        background-image: none !important;
-        border: 1px solid #cba6f7 !important;
+        background-color: rgba(203, 166, 247, 0.15);
+        background-image: none;
+        border: 1px solid #cba6f7;
         padding: 4px 12px;
         margin: 2px 4px;
         border-radius: 8px;
-        box-shadow: none !important;
-        text-shadow: none !important;
+        box-shadow: none;
+        text-shadow: none;
     }
 
     button.clock-module:hover {
-        background: rgba(203, 166, 247, 0.3) !important;
-        border-color: #f5c2e7 !important;
+        background-color: rgba(203, 166, 247, 0.3);
+        border-color: #f5c2e7;
     }
 
     button.clock-module label {
-        color: #cba6f7 !important;
+        color: #cba6f7;
         font-weight: bold;
     }
 
     button.clock-module:hover label {
-        color: #f5c2e7 !important;
+        color: #f5c2e7;
     }
 
     .mpris-module {
@@ -696,7 +696,8 @@
     }
 
     button.mpris-btn {
-        background: none;
+        background-color: transparent;
+        background-image: none;
         border: none;
         box-shadow: none;
         color: #b4befe;
@@ -726,27 +727,27 @@
     }
 
     button.volume-module {
-        background: rgba(166, 227, 161, 0.15) !important;
-        background-image: none !important;
-        border: 1px solid #a6e3a1 !important;
+        background-color: rgba(166, 227, 161, 0.15);
+        background-image: none;
+        border: 1px solid #a6e3a1;
         padding: 4px 12px;
         margin: 2px 4px;
         border-radius: 8px;
-        box-shadow: none !important;
-        text-shadow: none !important;
+        box-shadow: none;
+        text-shadow: none;
     }
 
     button.volume-module:hover {
-        background: rgba(166, 227, 161, 0.3) !important;
-        border-color: #89dceb !important;
+        background-color: rgba(166, 227, 161, 0.3);
+        border-color: #89dceb;
     }
 
     button.volume-module label {
-        color: #a6e3a1 !important;
+        color: #a6e3a1;
     }
 
     button.volume-module:hover label {
-        color: #89dceb !important;
+        color: #89dceb;
     }
 
     .battery-module {
@@ -786,7 +787,7 @@
 
     calendar.button {
         color: #cba6f7;
-        background: none;
+        background-color: transparent;
         background-image: none;
         border: none;
         box-shadow: none;
@@ -802,14 +803,10 @@
         color: #cdd6f4;
     }
 
-    calendar:selected {
+    calendar.view:selected {
         background-color: #cba6f7;
         color: #11111b;
         border-radius: 4px;
-    }
-
-    calendar:highlighted {
-        color: #f5c2e7;
     }
 
     .volume-popup-container {
