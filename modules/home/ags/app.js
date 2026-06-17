@@ -1,5 +1,7 @@
 import { App, Astal, Gtk } from "astal/gtk3";
 import { Variable, bind, execAsync } from "astal";
+import AstalApps from "gi://AstalApps";
+import Gdk from "gi://Gdk?version=3.0";
 
 const time = Variable("").poll(1000, ["date", "+%a %b %d, %H:%M"]);
 const volumeRaw = Variable("").poll(1000, ["wpctl", "get-volume", "@DEFAULT_AUDIO_SINK@"]);
@@ -260,11 +262,148 @@ function VolumePopup(monitor = 0) {
     );
 }
 
+function AppLauncher(monitor = 0) {
+    const apps = new AstalApps.Apps();
+    const query = Variable("");
+    const selectedIndex = Variable(0);
+
+    const getFilteredApps = (q) => {
+        if (!q) {
+            return apps.list.slice(0, 6);
+        }
+        return apps.fuzzy_query(q).slice(0, 6);
+    };
+
+    // Reset selected index when query changes
+    query.subscribe(() => selectedIndex.set(0));
+
+    const onActivate = (app) => {
+        if (app) {
+            app.launch();
+            App.toggle_window("applauncher");
+        }
+    };
+
+    const entryRef = Variable(null);
+
+    return (
+        <window
+            name="applauncher"
+            className="applauncher"
+            monitor={monitor}
+            anchor={Astal.WindowAnchor.TOP}
+            margins={[100, 0, 0, 0]}
+            keymode={Astal.Keymode.EXCLUSIVE}
+            exclusivity={Astal.Exclusivity.IGNORE}
+            visible={false}
+            setup={(self) => {
+                // Focus the entry when the window becomes visible
+                self.hook(self, "notify::visible", (win) => {
+                    if (win.visible) {
+                        query.set(""); // Clear query when opening
+                        const entry = entryRef.get();
+                        if (entry) {
+                            entry.text = "";
+                            entry.grab_focus();
+                        }
+                    }
+                });
+            }}
+            onKeyPressEvent={(self, event) => {
+                const [, keyval] = event.get_keyval();
+                const currentList = getFilteredApps(query.get());
+
+                if (keyval === Gdk.KEY_Escape) {
+                    App.toggle_window("applauncher");
+                    return true;
+                } else if (keyval === Gdk.KEY_Down) {
+                    if (selectedIndex.get() < currentList.length - 1) {
+                        selectedIndex.set(selectedIndex.get() + 1);
+                    }
+                    return true;
+                } else if (keyval === Gdk.KEY_Up) {
+                    if (selectedIndex.get() > 0) {
+                        selectedIndex.set(selectedIndex.get() - 1);
+                    }
+                    return true;
+                } else if (keyval === Gdk.KEY_Return || keyval === Gdk.KEY_KP_Enter) {
+                    const idx = selectedIndex.get();
+                    if (currentList[idx]) {
+                        onActivate(currentList[idx]);
+                    }
+                    return true;
+                }
+                return false;
+            }}
+        >
+            <box className="launcher-container" vertical={true} widthRequest={500}>
+                <box className="search-bar" vertical={false}>
+                    <label className="search-icon" label="" />
+                    <entry
+                        className="search-entry"
+                        hexpand={true}
+                        placeholderText="Search apps..."
+                        onChanged={(self) => query.set(self.text)}
+                        setup={(self) => entryRef.set(self)}
+                        onActivate={() => {
+                            const currentList = getFilteredApps(query.get());
+                            const idx = selectedIndex.get();
+                            if (currentList[idx]) {
+                                onActivate(currentList[idx]);
+                            }
+                        }}
+                    />
+                </box>
+                
+                <box className="results-list" vertical={true}>
+                    {bind(query).as(q => {
+                        const currentList = getFilteredApps(q);
+                        if (currentList.length === 0) {
+                            return (
+                                <box className="no-results" halign={Gtk.Align.CENTER}>
+                                    <label label="No apps found." />
+                                </box>
+                            );
+                        }
+                        return currentList.map((app, idx) => {
+                            const itemClass = bind(selectedIndex).as(sIdx => 
+                                sIdx === idx ? "launcher-item selected" : "launcher-item"
+                            );
+                            
+                            return (
+                                <button
+                                    className={itemClass}
+                                    onClicked={() => onActivate(app)}
+                                >
+                                    <box vertical={false} className="launcher-item-content">
+                                        <icon 
+                                            icon={app.icon_name || "application-x-executable"} 
+                                            setup={(self) => self.pixel_size = 32}
+                                            className="app-icon"
+                                        />
+                                        <box vertical={true} className="app-details" valign={Gtk.Align.CENTER}>
+                                            <label className="app-name" label={app.name} halign={Gtk.Align.START} />
+                                            {app.description && (
+                                                <label className="app-description" label={app.description} halign={Gtk.Align.START} max_width_chars={50} ellipsize={3} />
+                                            )}
+                                        </box>
+                                    </box>
+                                </button>
+                            );
+                        });
+                    })}
+                </box>
+            </box>
+        </window>
+    );
+}
+
 App.start({
     css: "/home/gian/.config/ags/style.css",
     main: () => {
         App.add_window(Bar(0));
         App.add_window(CalendarPopup(0));
         App.add_window(VolumePopup(0));
+        App.add_window(AppLauncher(0));
     }
 });

@@ -158,6 +158,12 @@
      fastfetch
      blender
      obs-studio
+     (pkgs.lib.hiPrio (pkgs.writeShellScriptBin "davinci-resolve" ''
+       export QT_QPA_PLATFORM=xcb
+       export QT_PLUGIN_PATH=""
+       export QML2_IMPORT_PATH=""
+       exec ${pkgs.davinci-resolve}/bin/davinci-resolve "$@"
+     ''))
      davinci-resolve
      clinfo
   ];
