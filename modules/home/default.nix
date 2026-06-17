@@ -290,11 +290,13 @@
 
     const time = Variable("").poll(1000, ["date", "+%a %b %d, %H:%M"]);
     const volumeRaw = Variable("").poll(1000, ["wpctl", "get-volume", "@DEFAULT_AUDIO_SINK@"]);
+    const volumeValue = Variable(0).poll(1000, ["sh", "-c", "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2}' 2>/dev/null || echo '0'"]);
     const batteryRaw = Variable("").poll(5000, ["sh", "-c", "echo \"$(cat /sys/class/power_supply/BAT0/capacity 2>/dev/null || echo 0) $(cat /sys/class/power_supply/BAT0/status 2>/dev/null || echo Unknown)\""]);
     const wifiRaw = Variable("").poll(5000, ["sh", "-c", "nmcli -t -f ACTIVE,SSID dev wifi 2>/dev/null | grep '^yes' | cut -d: -f2 || true"]);
     const cpuRaw = Variable("").poll(2000, ["sh", "-c", "top -bn1 | grep 'Cpu(s)' | sed 's/.*, *\\([0-9.]*\\)%* id.*/\\1/' | awk '{print 100 - $1}'"]);
     const ramRaw = Variable("").poll(2000, ["sh", "-c", "free -m | awk '/Mem:/ {printf \"%d\", $3/$2*100}'"]);
     const niriStateRaw = Variable('{"workspaces":[],"windows":[]}').poll(500, ["sh", "-c", "echo \"{ \\\"workspaces\\\": $(niri msg -j workspaces 2>/dev/null || echo '[]'), \\\"windows\\\": $(niri msg -j windows 2>/dev/null || echo '[]') }\""]);
+    const mprisRaw = Variable("Stopped||").poll(2000, ["sh", "-c", "echo \"$(playerctl status 2>/dev/null || echo Stopped)|$(playerctl metadata title 2>/dev/null || echo)|$(playerctl metadata artist 2>/dev/null || echo)\""]);
 
     const getAppIcon = (appId) => {
         if (!appId) return "󰖲";
@@ -368,6 +370,45 @@
         );
     }
 
+    function MprisModule() {
+        return (
+            <box className="mpris-container">
+                {bind(mprisRaw).as(raw => {
+                    if (!raw) return <box />;
+                    const parts = raw.split("|");
+                    const status = parts[0];
+                    const title = parts[1] || "";
+                    const artist = parts[2] || "";
+                    
+                    if (status === "Stopped" || !title) return <box visible={false} />;
+                    
+                    let displayTitle = title;
+                    if (title.length > 22) {
+                        displayTitle = title.substring(0, 19) + "...";
+                    }
+                    
+                    return (
+                        <box className="module mpris-module">
+                            <label className="mpris-icon" label="󰎆 " />
+                            <label className="mpris-text" label={displayTitle + (artist ? ` - ` + artist : "")} />
+                            <box className="mpris-controls">
+                                <button className="mpris-btn" onClicked={() => execAsync("playerctl previous")}>
+                                    <label label="󰒮" />
+                                </button>
+                                <button className="mpris-btn" onClicked={() => execAsync("playerctl play-pause")}>
+                                    <label label={status === "Playing" ? "󰏤" : "󰐊"} />
+                                </button>
+                                <button className="mpris-btn" onClicked={() => execAsync("playerctl next")}>
+                                    <label label="󰒭" />
+                                </button>
+                            </box>
+                        </box>
+                    );
+                })}
+            </box>
+        );
+    }
+
     function Bar(monitor = 0) {
         return (
             <window
@@ -388,9 +429,10 @@
                     }
                     centerWidget={
                         <box className="center-modules">
-                            <box className="module clock-module">
+                            <button className="module clock-module" onClicked={() => App.toggle_window("calendar-popup")}>
                                 <label className="clock" label={bind(time)} />
-                            </box>
+                            </button>
+                            <MprisModule />
                         </box>
                     }
                     endWidget={
@@ -405,7 +447,7 @@
                                     return ssid ? `󰤨 ` + ssid : "󰤮 Disconnected";
                                 })} />
                             </box>
-                            <box className="module volume-module">
+                            <button className="module volume-module" onClicked={() => App.toggle_window("volume-popup")}>
                                 <label className="volume" label={bind(volumeRaw).as(v => {
                                     if (!v) return "󰕾 --%";
                                     if (v.includes("[MUTED]")) return "󰝟 Muted";
@@ -417,7 +459,7 @@
                                     else if (pct < 70) icon = "󰖀";
                                     return icon + ` ` + pct + `%`;
                                 })} />
-                            </box>
+                            </button>
                             <box className="module battery-module">
                                 <label className="battery" label={bind(batteryRaw).as(b => {
                                     if (!b) return "󰂎 --%";
@@ -448,10 +490,57 @@
         );
     }
 
+    function CalendarPopup(monitor = 0) {
+        return (
+            <window
+                name="calendar-popup"
+                className="calendar-popup"
+                monitor={monitor}
+                anchor={Astal.WindowAnchor.TOP}
+                exclusivity={Astal.Exclusivity.IGNORE}
+                visible={false}
+            >
+                <box className="calendar-container">
+                    <Gtk.Calendar />
+                </box>
+            </window>
+        );
+    }
+
+    function VolumePopup(monitor = 0) {
+        return (
+            <window
+                name="volume-popup"
+                className="volume-popup"
+                monitor={monitor}
+                anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.RIGHT}
+                exclusivity={Astal.Exclusivity.IGNORE}
+                visible={false}
+            >
+                <box className="volume-popup-container" widthRequest={200}>
+                    <box className="volume-popup-header">
+                        <label className="volume-popup-title" label="󰕾 Volume Control" />
+                    </box>
+                    <slider
+                        className="volume-slider"
+                        value={bind(volumeValue)}
+                        min={0}
+                        max={1.5}
+                        onDragged={(self) => {
+                            execAsync(`wpctl set-volume @DEFAULT_AUDIO_SINK@ ` + self.value.toFixed(2));
+                        }}
+                    />
+                </box>
+            </window>
+        );
+    }
+
     App.start({
         css: "/home/gian/.config/ags/style.css",
         main: () => {
             App.add_window(Bar(0));
+            App.add_window(CalendarPopup(0));
+            App.add_window(VolumePopup(0));
         }
     });
   '';
@@ -465,13 +554,13 @@
     window {
         background-color: transparent;
         background: none;
+        margin: 8px 12px 0 12px;
     }
 
     .bar-container {
         background-color: rgba(30, 30, 46, 0.85);
         border: 1px solid #313244;
         border-radius: 12px;
-        margin: 8px 12px 0 12px;
         padding: 4px 8px;
         color: #cdd6f4;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
@@ -546,16 +635,57 @@
         font-size: 14px;
     }
 
-    .clock-module {
+    button.clock-module {
         background-color: rgba(245, 194, 231, 0.15);
         border-color: #f5c2e7;
         color: #f5c2e7;
         font-weight: bold;
+        padding: 4px 12px;
+        margin: 2px 4px;
+        border-radius: 8px;
+        box-shadow: none;
+    }
+
+    button.clock-module:hover {
+        border-color: #cba6f7;
+        background-color: rgba(245, 194, 231, 0.25);
     }
 
     .clock {
         font-weight: bold;
         color: #f5c2e7;
+    }
+
+    .mpris-module {
+        background-color: rgba(180, 190, 254, 0.15);
+        border-color: #b4befe;
+        color: #b4befe;
+    }
+
+    .mpris-icon {
+        color: #b4befe;
+    }
+
+    .mpris-text {
+        font-weight: bold;
+        color: #b4befe;
+    }
+
+    .mpris-controls {
+        margin-left: 8px;
+    }
+
+    button.mpris-btn {
+        background: none;
+        border: none;
+        box-shadow: none;
+        color: #b4befe;
+        padding: 0 4px;
+        margin: 0;
+    }
+
+    button.mpris-btn:hover {
+        color: #cdd6f4;
     }
 
     .cpu-ram-module {
@@ -575,12 +705,78 @@
         color: #89dceb;
     }
 
-    .volume-module {
+    button.volume-module {
+        background-color: rgba(166, 227, 161, 0.15);
+        border-color: #a6e3a1;
+        color: #a6e3a1;
+        padding: 4px 12px;
+        margin: 2px 4px;
+        border-radius: 8px;
+        box-shadow: none;
+    }
+
+    button.volume-module:hover {
+        border-color: #a6e3a1;
+        background-color: rgba(166, 227, 161, 0.25);
+    }
+
+    .volume {
         color: #a6e3a1;
     }
 
     .battery-module {
         color: #fab387;
+    }
+
+    /* Styling popups */
+    .calendar-container, .volume-popup-container {
+        background-color: #1e1e2e;
+        border: 2px solid #cba6f7;
+        border-radius: 12px;
+        padding: 12px;
+        color: #cdd6f4;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+    }
+
+    .calendar-popup {
+        margin-top: 54px;
+    }
+
+    .volume-popup {
+        margin-top: 54px;
+        margin-right: 12px;
+    }
+
+    .volume-popup-container {
+        border-color: #a6e3a1;
+    }
+
+    .volume-popup-header {
+        margin-bottom: 8px;
+    }
+
+    .volume-popup-title {
+        font-weight: bold;
+        color: #a6e3a1;
+    }
+
+    scale.volume-slider trough {
+        background-color: #313244;
+        border-radius: 4px;
+        min-height: 8px;
+    }
+
+    scale.volume-slider highlight {
+        background-color: #a6e3a1;
+        border-radius: 4px;
+    }
+
+    scale.volume-slider slider {
+        background-color: #cdd6f4;
+        border-radius: 50%;
+        min-width: 14px;
+        min-height: 14px;
+        margin: -3px 0;
     }
   '';
 }
