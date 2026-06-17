@@ -616,5 +616,132 @@
         };
       };
     };
+
+    userKeymaps = [
+      {
+        context = "Editor";
+        bindings = {
+          "ctrl-right" = "workspace::ActivatePaneRight";
+          "ctrl-left" = "workspace::ActivatePaneLeft";
+          "ctrl-alt-right" = "workspace::SwapPaneRight";
+          "ctrl-alt-left" = "workspace::SwapPaneLeft";
+        };
+      }
+      {
+        bindings = {
+          "ctrl-alt-g" = [
+            "agent::NewExternalAgentThread"
+            { agent = { custom = { name = "gemini"; }; }; }
+          ];
+        };
+      }
+      {
+        context = "VimControl && !menu";
+        bindings = {
+          "space c r" = "editor::Rename";
+        };
+      }
+      {
+        context = "VimControl && !menu";
+        unbind = {
+          "g r n" = "editor::Rename";
+        };
+      }
+      {
+        context = "VimControl && !menu";
+        bindings = {
+          "space c a" = "editor::ToggleCodeActions";
+        };
+      }
+      {
+        context = "VimControl && !menu";
+        unbind = {
+          "g ." = "editor::ToggleCodeActions";
+        };
+      }
+      {
+        context = "Editor";
+        bindings = {
+          "space g d" = "editor::ToggleSplitDiff";
+        };
+      }
+      {
+        bindings = {
+          "space" = "git_panel::OpenMenu";
+        };
+      }
+      {
+        context = "Workspace";
+        bindings = {
+          "space g g" = "git_panel::ToggleFocus";
+        };
+      }
+      {
+        context = "Workspace";
+        unbind = {
+          "ctrl-shift-g" = "git_panel::ToggleFocus";
+        };
+      }
+      {
+        context = "Workspace";
+        bindings = {
+          "space g c" = "git_panel::Close";
+        };
+      }
+      {
+        context = "Workspace";
+        bindings = {
+          "shift-space e" = "workspace::ToggleRightDock";
+        };
+      }
+      {
+        context = "Workspace";
+        unbind = {
+          "ctrl-alt-b" = "workspace::ToggleRightDock";
+        };
+      }
+      {
+        context = "Workspace";
+        bindings = {
+          "ctrl-alt-o" = "workspace::NewFile";
+        };
+      }
+      {
+        context = "Workspace";
+        unbind = {
+          "ctrl-n" = "workspace::NewFile";
+        };
+      }
+      {
+        context = "!Editor && !Terminal";
+        unbind = {
+          "space f" = "file_finder::Toggle";
+        };
+      }
+      {
+        context = "(vim_mode == helix_normal || vim_mode == helix_select) && !menu";
+        unbind = {
+          "space f" = "file_finder::Toggle";
+        };
+      }
+      {
+        context = "!Editor && !Terminal";
+        bindings = {
+          "space space" = "file_finder::Toggle";
+        };
+      }
+      {
+        context = "Workspace";
+        bindings = {
+          "space a i" = "agent::ToggleFocus";
+        };
+      }
+      {
+        context = "Workspace";
+        unbind = {
+          "ctrl-shift-ç" = "agent::ToggleFocus";
+        };
+      }
+    ];
   };
 }
