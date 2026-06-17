@@ -17,6 +17,7 @@
   # User packages
   home.packages = with pkgs; [
     satty
+    mpvpaper
     (ags.override {
       extraPackages = [
         astal.apps

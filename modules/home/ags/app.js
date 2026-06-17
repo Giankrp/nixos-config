@@ -411,7 +411,32 @@ const getSavedWallpaper = () => {
     return "/home/gian/.config/ags/wallpaper.jpg";
 };
 
-const currentWallpaper = Variable(getSavedWallpaper());
+const savedPath = getSavedWallpaper();
+const isSavedVideo = savedPath.endsWith(".mp4") || savedPath.endsWith(".mkv") || savedPath.endsWith(".webm") || savedPath.endsWith(".gif");
+
+if (isSavedVideo) {
+    execAsync(["sh", "-c", `pkill mpvpaper ; mpvpaper -p -o "no-audio --loop-playlist" '*' "${savedPath}"`]).catch(() => {});
+}
+
+const currentWallpaper = Variable(isSavedVideo ? "" : savedPath);
+
+const changeWallpaper = (path) => {
+    const isVideo = path.endsWith(".mp4") || path.endsWith(".mkv") || path.endsWith(".webm") || path.endsWith(".gif");
+    
+    if (isVideo) {
+        execAsync("pkill mpvpaper")
+            .catch(() => {})
+            .finally(() => {
+                currentWallpaper.set("");
+                execAsync(["sh", "-c", `mpvpaper -p -o "no-audio --loop-playlist" '*' "${path}"`]).catch(() => {});
+            });
+    } else {
+        execAsync("pkill mpvpaper").catch(() => {});
+        currentWallpaper.set(path);
+    }
+    
+    execAsync(["sh", "-c", `mkdir -p /home/gian/.cache/ags && echo "${path}" > /home/gian/.cache/ags/current_wallpaper.txt`]).catch(() => {});
+};
 
 function Wallpaper(monitor = 0) {
     return (
@@ -427,9 +452,11 @@ function Wallpaper(monitor = 0) {
                 className="wallpaper-box" 
                 setup={(self) => {
                     self.hook(currentWallpaper, () => {
-                        self.css = `background-image: url('file://${currentWallpaper.get()}');`;
+                        const wall = currentWallpaper.get();
+                        self.css = wall ? `background-image: url('file://${wall}');` : `background-image: none; background-color: transparent;`;
                     });
-                    self.css = `background-image: url('file://${currentWallpaper.get()}');`;
+                    const wall = currentWallpaper.get();
+                    self.css = wall ? `background-image: url('file://${wall}');` : `background-image: none; background-color: transparent;`;
                 }}
             />
         </window>
@@ -440,7 +467,7 @@ function WallpaperPicker(monitor = 0) {
     const wallpapersList = Variable([]);
 
     const updateWallpapersList = () => {
-        execAsync(["sh", "-c", "find /home/gian/Pictures/Wallpapers -maxdepth 1 -type f \\( -name '*.jpg' -o -name '*.jpeg' -o -name '*.png' -o -name '*.webp' \\) 2>/dev/null"])
+        execAsync(["sh", "-c", "find /home/gian/Pictures/Wallpapers -maxdepth 1 -type f \\( -name '*.jpg' -o -name '*.jpeg' -o -name '*.png' -o -name '*.webp' -o -name '*.gif' -o -name '*.mp4' -o -name '*.mkv' -o -name '*.webm' \\) 2>/dev/null"])
             .then(out => {
                 const list = out.split("\n").map(f => f.trim()).filter(f => f !== "");
                 wallpapersList.set(list);
@@ -516,32 +543,40 @@ function WallpaperPicker(monitor = 0) {
                             const rows = chunkArray(list, 3);
                             return rows.map(row => (
                                 <box vertical={false} className="wallpaper-row">
-                                    {row.map(wallpaperPath => (
-                                        <button
-                                            className="wallpaper-card"
-                                            onClicked={() => {
-                                                currentWallpaper.set(wallpaperPath);
-                                                execAsync(["sh", "-c", `mkdir -p /home/gian/.cache/ags && echo "${wallpaperPath}" > /home/gian/.cache/ags/current_wallpaper.txt`]);
-                                                App.toggle_window("wallpaperpicker");
-                                            }}
-                                        >
-                                            <box vertical={true} className="wallpaper-card-content">
-                                                <box 
-                                                    className="wallpaper-card-thumbnail" 
-                                                    css={`background-image: url('file://${wallpaperPath}');`}
-                                                    widthRequest={140}
-                                                    heightRequest={80}
-                                                />
-                                                <label 
-                                                    className="wallpaper-card-label" 
-                                                    label={wallpaperPath.split("/").pop()} 
-                                                    maxWidthChars={14}
-                                                    ellipsize={3}
-                                                    halign={Gtk.Align.CENTER}
-                                                />
-                                            </box>
-                                        </button>
-                                    ))}
+                                    {row.map(wallpaperPath => {
+                                        const isVideoFile = wallpaperPath.endsWith(".mp4") || wallpaperPath.endsWith(".mkv") || wallpaperPath.endsWith(".webm") || wallpaperPath.endsWith(".gif");
+                                        return (
+                                            <button
+                                                className="wallpaper-card"
+                                                onClicked={() => {
+                                                    changeWallpaper(wallpaperPath);
+                                                    App.toggle_window("wallpaperpicker");
+                                                }}
+                                            >
+                                                <box vertical={true} className="wallpaper-card-content">
+                                                    {isVideoFile ? (
+                                                        <box className="wallpaper-card-thumbnail video-thumbnail" halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} widthRequest={140} heightRequest={80}>
+                                                            <label className="video-icon" label="󰿎" />
+                                                        </box>
+                                                    ) : (
+                                                        <box 
+                                                            className="wallpaper-card-thumbnail" 
+                                                            css={`background-image: url('file://${wallpaperPath}');`}
+                                                            widthRequest={140}
+                                                            heightRequest={80}
+                                                        />
+                                                    )}
+                                                    <label 
+                                                        className="wallpaper-card-label" 
+                                                        label={wallpaperPath.split("/").pop()} 
+                                                        maxWidthChars={14}
+                                                        ellipsize={3}
+                                                        halign={Gtk.Align.CENTER}
+                                                    />
+                                                </box>
+                                            </button>
+                                        );
+                                    })}
                                 </box>
                             ));
                         })}
