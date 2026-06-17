@@ -25,7 +25,7 @@ Para clonar y desplegar esta configuración en una nueva máquina, sigue estos p
 Clona esta configuración directamente en el directorio estándar `/etc/nixos/`:
 ```bash
 sudo rm -rf /etc/nixos
-sudo git clone <URL_DE_TU_REPO> /etc/nixos
+sudo git clone https://github.com/Giankrp/nixos-config.git /etc/nixos
 ```
 
 ### 2. Generar y sobreescribir la configuración de hardware
