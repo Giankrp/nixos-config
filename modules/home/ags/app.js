@@ -1,7 +1,6 @@
 import { App, Astal, Gtk } from "astal/gtk3";
 import { Variable, bind, execAsync } from "astal";
 import AstalApps from "gi://AstalApps";
-import Gdk from "gi://Gdk?version=3.0";
 
 const time = Variable("").poll(1000, ["date", "+%a %b %d, %H:%M"]);
 const volumeRaw = Variable("").poll(1000, ["wpctl", "get-volume", "@DEFAULT_AUDIO_SINK@"]);
@@ -293,6 +292,10 @@ function AppLauncher(monitor = 0) {
             monitor={monitor}
             anchor={Astal.WindowAnchor.TOP}
             margins={[100, 0, 0, 0]}
+            marginTop={100}
+            margin_top={100}
+            margin-top={100}
+            layer={Astal.Layer.OVERLAY}
             keymode={Astal.Keymode.EXCLUSIVE}
             exclusivity={Astal.Exclusivity.IGNORE}
             visible={false}
@@ -313,20 +316,20 @@ function AppLauncher(monitor = 0) {
                 const [, keyval] = event.get_keyval();
                 const currentList = getFilteredApps(query.get());
 
-                if (keyval === Gdk.KEY_Escape) {
+                if (keyval === 65307) { // Escape
                     App.toggle_window("applauncher");
                     return true;
-                } else if (keyval === Gdk.KEY_Down) {
+                } else if (keyval === 65364) { // Down
                     if (selectedIndex.get() < currentList.length - 1) {
                         selectedIndex.set(selectedIndex.get() + 1);
                     }
                     return true;
-                } else if (keyval === Gdk.KEY_Up) {
+                } else if (keyval === 65362) { // Up
                     if (selectedIndex.get() > 0) {
                         selectedIndex.set(selectedIndex.get() - 1);
                     }
                     return true;
-                } else if (keyval === Gdk.KEY_Return || keyval === Gdk.KEY_KP_Enter) {
+                } else if (keyval === 65293 || keyval === 65421) { // Enter
                     const idx = selectedIndex.get();
                     if (currentList[idx]) {
                         onActivate(currentList[idx]);

@@ -162,6 +162,15 @@
        export QT_QPA_PLATFORM=xcb
        export QT_PLUGIN_PATH=""
        export QML2_IMPORT_PATH=""
+       export ROC_ENABLE_PRE_VEGA=1
+       export RUSTICL_ENABLE=radeonsi
+       export DRI_PRIME=1
+       
+       # If DISPLAY is not set but WAYLAND_DISPLAY is, guess that DISPLAY is :0
+       if [ -z "$DISPLAY" ] && [ -n "$WAYLAND_DISPLAY" ]; then
+         export DISPLAY=:0
+       fi
+
        exec ${pkgs.davinci-resolve}/bin/davinci-resolve "$@"
      ''))
      davinci-resolve
@@ -205,6 +214,7 @@
     extraPackages = with pkgs; [
       rocmPackages.clr
       rocmPackages.clr.icd
+      mesa.opencl
     ];
   };
 
