@@ -209,13 +209,15 @@ function CalendarPopup(monitor = 0) {
             name="calendar-popup"
             className="calendar-popup"
             monitor={monitor}
-            anchor={Astal.WindowAnchor.TOP}
-            margins={[58, 0, 0, 0]}
+            anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.LEFT | Astal.WindowAnchor.RIGHT}
+            margins={[58, 12, 0, 12]}
             exclusivity={Astal.Exclusivity.IGNORE}
             visible={false}
         >
-            <box className="calendar-container" vertical={true} widthRequest={300} heightRequest={280}>
-                <Gtk.Calendar visible={true} hexpand={true} vexpand={true} />
+            <box halign={Gtk.Align.CENTER}>
+                <box className="calendar-container" vertical={true} widthRequest={300} heightRequest={280}>
+                    <Gtk.Calendar visible={true} hexpand={true} vexpand={true} />
+                </box>
             </box>
         </window>
     );
