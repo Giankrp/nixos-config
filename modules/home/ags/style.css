@@ -382,3 +382,14 @@ button.launcher-item:hover .app-name, button.launcher-item.selected .app-name {
 button.launcher-item:hover .app-description, button.launcher-item.selected .app-description {
     color: #cdd6f4;
 }
+
+.wallpaper-window {
+    background-color: transparent;
+}
+
+.wallpaper-box {
+    background-color: #1e1e2e;
+    background-image: url("file:///home/gian/.config/ags/wallpaper.jpg");
+    background-size: cover;
+    background-position: center;
+}

@@ -401,9 +401,25 @@ function AppLauncher(monitor = 0) {
     );
 }
 
+function Wallpaper(monitor = 0) {
+    return (
+        <window
+            name={`wallpaper${monitor}`}
+            className="wallpaper-window"
+            monitor={monitor}
+            exclusivity={Astal.Exclusivity.IGNORE}
+            layer={Astal.Layer.BACKGROUND}
+            anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.LEFT | Astal.WindowAnchor.RIGHT}
+        >
+            <box className="wallpaper-box" />
+        </window>
+    );
+}
+
 App.start({
     css: "/home/gian/.config/ags/style.css",
     main: () => {
+        App.add_window(Wallpaper(0));
         App.add_window(Bar(0));
         App.add_window(CalendarPopup(0));
         App.add_window(VolumePopup(0));

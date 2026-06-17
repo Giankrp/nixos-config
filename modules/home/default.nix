@@ -290,6 +290,7 @@
   # AGS (Aylur's GTK Shell) configuration files
   xdg.configFile."ags/app.js".source = ./ags/app.js;
   xdg.configFile."ags/style.css".source = ./ags/style.css;
+  xdg.configFile."ags/wallpaper.jpg".source = ./ags/wallpaper.jpg;
 
   programs.spicetify =
     let
