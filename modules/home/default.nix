@@ -302,13 +302,13 @@
                 anchor={TOP | LEFT | RIGHT}
             >
                 <centerbox>
-                    <box className="left">
+                    <box className="left" hexpand={true} hpack="start">
                         <label className="logo" label="❄️ NixOS" />
                     </box>
-                    <box className="center">
+                    <box className="center" hexpand={true} hpack="center">
                         <label className="clock" label={time()} />
                     </box>
-                    <box className="right" hpack="end">
+                    <box className="right" hexpand={true} hpack="end">
                         <label className="status" label="Active" />
                     </box>
                 </centerbox>
@@ -325,8 +325,8 @@
   '';
 
   xdg.configFile."ags/style.css".text = ''
-    * {
-        font-family: "CaskaydiaCove Nerd Font", sans-serif;
+    label {
+        font-family: "CaskaydiaCove Nerd Font";
         font-size: 13px;
     }
 
@@ -339,20 +339,20 @@
     .logo {
         color: #89b4fa;
         font-weight: bold;
-        margin-left: 15px;
-        padding: 6px 0;
+        margin-left: 20px;
+        padding: 8px 0;
     }
 
     .clock {
         color: #f5c2e7;
         font-weight: bold;
-        padding: 6px 0;
+        padding: 8px 0;
     }
 
     .status {
         color: #a6e3a1;
-        margin-right: 15px;
-        padding: 6px 0;
+        margin-right: 20px;
+        padding: 8px 0;
     }
   '';
 }
