@@ -1,5 +1,5 @@
 import { App, Astal, Gtk } from "astal/gtk3";
-import { Variable, bind, execAsync } from "astal";
+import { Variable, bind, execAsync, exec } from "astal";
 import AstalApps from "gi://AstalApps";
 
 const time = Variable("").poll(1000, ["date", "+%a %b %d, %H:%M"]);
@@ -401,6 +401,18 @@ function AppLauncher(monitor = 0) {
     );
 }
 
+const getSavedWallpaper = () => {
+    try {
+        const path = exec("cat /home/gian/.cache/ags/current_wallpaper.txt 2>/dev/null").trim();
+        if (path && exec(`test -f "${path}" && echo yes || echo no`).trim() === "yes") {
+            return path;
+        }
+    } catch (e) {}
+    return "/home/gian/.config/ags/wallpaper.jpg";
+};
+
+const currentWallpaper = Variable(getSavedWallpaper());
+
 function Wallpaper(monitor = 0) {
     return (
         <window
@@ -411,7 +423,131 @@ function Wallpaper(monitor = 0) {
             layer={Astal.Layer.BACKGROUND}
             anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.LEFT | Astal.WindowAnchor.RIGHT}
         >
-            <box className="wallpaper-box" />
+            <box 
+                className="wallpaper-box" 
+                setup={(self) => {
+                    self.hook(currentWallpaper, () => {
+                        self.css = `background-image: url('file://${currentWallpaper.get()}');`;
+                    });
+                    self.css = `background-image: url('file://${currentWallpaper.get()}');`;
+                }}
+            />
+        </window>
+    );
+}
+
+function WallpaperPicker(monitor = 0) {
+    const wallpapersList = Variable([]);
+
+    const updateWallpapersList = () => {
+        execAsync(["sh", "-c", "ls /home/gian/Pictures/Wallpapers/*.{jpg,jpeg,png,webp} 2>/dev/null"])
+            .then(out => {
+                const list = out.split("\n").map(f => f.trim()).filter(f => f !== "");
+                wallpapersList.set(list);
+            })
+            .catch(() => {
+                wallpapersList.set([]);
+            });
+    };
+
+    const chunkArray = (arr, size) => {
+        const chunked = [];
+        for (let i = 0; i < arr.length; i += size) {
+            chunked.push(arr.slice(i, i + size));
+        }
+        return chunked;
+    };
+
+    return (
+        <window
+            name="wallpaperpicker"
+            className="wallpaperpicker"
+            monitor={monitor}
+            anchor={Astal.WindowAnchor.TOP}
+            margins={[100, 0, 0, 0]}
+            marginTop={100}
+            margin_top={100}
+            margin-top={100}
+            layer={Astal.Layer.OVERLAY}
+            keymode={Astal.Keymode.EXCLUSIVE}
+            exclusivity={Astal.Exclusivity.IGNORE}
+            visible={false}
+            setup={(self) => {
+                self.hook(self, "notify::visible", (win) => {
+                    if (win.visible) {
+                        updateWallpapersList();
+                    }
+                });
+            }}
+            onKeyPressEvent={(self, event) => {
+                const [, keyval] = event.get_keyval();
+                if (keyval === 65307) { // Escape
+                    App.toggle_window("wallpaperpicker");
+                    return true;
+                }
+                return false;
+            }}
+        >
+            <box className="picker-container" vertical={true} widthRequest={550}>
+                <box className="picker-header" vertical={false}>
+                    <label className="picker-icon" label="󰸉" />
+                    <label className="picker-title" label=" Select Wallpaper" />
+                    <button 
+                        className="picker-close-btn" 
+                        halign={Gtk.Align.END} 
+                        hexpand={true}
+                        onClicked={() => App.toggle_window("wallpaperpicker")}
+                    >
+                        <label label="󰅖" />
+                    </button>
+                </box>
+                
+                <scrollable className="picker-scroll" heightRequest={400} propagateNaturalHeight={false}>
+                    <box className="picker-grid" vertical={true}>
+                        {bind(wallpapersList).as(list => {
+                            if (list.length === 0) {
+                                return (
+                                    <box className="no-wallpapers" halign={Gtk.Align.CENTER}>
+                                        <label label="No wallpapers found in ~/Pictures/Wallpapers" />
+                                    </box>
+                                );
+                            }
+                            
+                            const rows = chunkArray(list, 3);
+                            return rows.map(row => (
+                                <box vertical={false} className="wallpaper-row">
+                                    {row.map(wallpaperPath => (
+                                        <button
+                                            className="wallpaper-card"
+                                            onClicked={() => {
+                                                currentWallpaper.set(wallpaperPath);
+                                                execAsync(["sh", "-c", `mkdir -p /home/gian/.cache/ags && echo "${wallpaperPath}" > /home/gian/.cache/ags/current_wallpaper.txt`]);
+                                                App.toggle_window("wallpaperpicker");
+                                            }}
+                                        >
+                                            <box vertical={true} className="wallpaper-card-content">
+                                                <box 
+                                                    className="wallpaper-card-thumbnail" 
+                                                    css={`background-image: url('file://${wallpaperPath}');`}
+                                                    widthRequest={140}
+                                                    heightRequest={80}
+                                                />
+                                                <label 
+                                                    className="wallpaper-card-label" 
+                                                    label={wallpaperPath.split("/").pop()} 
+                                                    maxWidthChars={14}
+                                                    ellipsize={3}
+                                                    halign={Gtk.Align.CENTER}
+                                                />
+                                            </box>
+                                        </button>
+                                    ))}
+                                </box>
+                            ));
+                        })}
+                    </box>
+                </scrollable>
+            </box>
         </window>
     );
 }
@@ -424,5 +560,6 @@ App.start({
         App.add_window(CalendarPopup(0));
         App.add_window(VolumePopup(0));
         App.add_window(AppLauncher(0));
+        App.add_window(WallpaperPicker(0));
     }
 });

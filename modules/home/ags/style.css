@@ -389,7 +389,118 @@ button.launcher-item:hover .app-description, button.launcher-item.selected .app-
 
 .wallpaper-box {
     background-color: #1e1e2e;
-    background-image: url("file:///home/gian/.config/ags/wallpaper.jpg");
     background-size: cover;
     background-position: center;
+}
+
+/* Wallpaper Picker styling */
+window.wallpaperpicker {
+    background-color: transparent;
+}
+
+.picker-container {
+    background-color: rgba(30, 30, 46, 0.85); /* Transparent Catppuccin Base */
+    border: 2px solid #cba6f7; /* Mauve border */
+    border-radius: 16px;
+    padding: 16px;
+    color: #cdd6f4;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+}
+
+.picker-header {
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #313244;
+}
+
+.picker-icon {
+    font-size: 20px;
+    color: #cba6f7;
+    margin-right: 8px;
+}
+
+.picker-title {
+    font-weight: bold;
+    font-size: 16px;
+    color: #cdd6f4;
+}
+
+button.picker-close-btn {
+    background-color: transparent;
+    background-image: none;
+    border: none;
+    box-shadow: none;
+    color: #f38ba8; /* Red */
+    font-size: 18px;
+    padding: 0;
+    margin: 0;
+    transition: all 0.15s ease;
+}
+
+button.picker-close-btn:hover {
+    color: #f5e0dc; /* Flamingo */
+    transform: scale(1.1);
+}
+
+.picker-scroll {
+    background-color: transparent;
+    padding: 4px;
+}
+
+.picker-grid {
+    padding: 4px;
+}
+
+.wallpaper-row {
+    margin: 8px 0;
+}
+
+button.wallpaper-card {
+    background-color: #181825; /* Mantle */
+    border: 1px solid #313244;
+    border-radius: 10px;
+    padding: 8px;
+    margin: 0 6px;
+    box-shadow: none;
+    text-shadow: none;
+    transition: all 0.2s ease;
+}
+
+button.wallpaper-card:hover {
+    border-color: #cba6f7;
+    background-color: rgba(203, 166, 247, 0.1);
+    transform: translateY(-2px);
+}
+
+.wallpaper-card-content {
+    margin: 0;
+}
+
+.wallpaper-card-thumbnail {
+    border-radius: 6px;
+    background-color: #11111b;
+    background-size: cover;
+    background-position: center;
+    border: 1px solid #313244;
+    margin-bottom: 6px;
+}
+
+button.wallpaper-card:hover .wallpaper-card-thumbnail {
+    border-color: #cba6f7;
+}
+
+.wallpaper-card-label {
+    font-size: 11px;
+    color: #a6adc8; /* Subtext0 */
+    font-weight: bold;
+}
+
+button.wallpaper-card:hover .wallpaper-card-label {
+    color: #f5c2e7; /* Pink */
+}
+
+.no-wallpapers {
+    padding: 32px;
+    color: #7f849c;
+    font-style: italic;
 }
