@@ -497,11 +497,16 @@
                 className="calendar-popup"
                 monitor={monitor}
                 anchor={Astal.WindowAnchor.TOP}
+                margins={[54, 0, 0, 0]}
+                keymode="on-demand"
                 exclusivity={Astal.Exclusivity.IGNORE}
                 visible={false}
+                onFocusOutEvent={(self) => {
+                    self.hide();
+                }}
             >
-                <box className="calendar-container">
-                    <Gtk.Calendar />
+                <box className="calendar-container" vertical={true} widthRequest={300} heightRequest={280}>
+                    <Gtk.Calendar hexpand={true} vexpand={true} />
                 </box>
             </window>
         );
@@ -514,10 +519,15 @@
                 className="volume-popup"
                 monitor={monitor}
                 anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.RIGHT}
+                margins={[54, 12, 0, 0]}
+                keymode="on-demand"
                 exclusivity={Astal.Exclusivity.IGNORE}
                 visible={false}
+                onFocusOutEvent={(self) => {
+                    self.hide();
+                }}
             >
-                <box className="volume-popup-container" widthRequest={200}>
+                <box className="volume-popup-container" vertical={true} widthRequest={280}>
                     <box className="volume-popup-header">
                         <label className="volume-popup-title" label="󰕾 Volume Control" />
                     </box>
@@ -526,6 +536,7 @@
                         value={bind(volumeValue)}
                         min={0}
                         max={1.5}
+                        hexpand={true}
                         onDragged={(self) => {
                             execAsync(`wpctl set-volume @DEFAULT_AUDIO_SINK@ ` + self.value.toFixed(2));
                         }}
@@ -738,11 +749,11 @@
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
     }
 
-    .calendar-popup {
+    window.calendar-popup {
         margin-top: 54px;
     }
 
-    .volume-popup {
+    window.volume-popup {
         margin-top: 54px;
         margin-right: 12px;
     }
