@@ -285,39 +285,134 @@
 
   # AGS (Aylur's GTK Shell) configuration files
   xdg.configFile."ags/app.js".text = ''
-    import { App, Astal } from "astal/gtk3";
-    import { Variable } from "astal";
+    import { App, Astal, Gtk } from "astal/gtk3";
+    import { Variable, bind, execAsync } from "astal";
 
-    // Reactive time variable, updates every second using the date command
-    const time = Variable("").poll(1000, 'date "+%a %b %d, %H:%M"');
+    const time = Variable("").poll(1000, ["date", "+%a %b %d, %H:%M"]);
+    const volumeRaw = Variable("").poll(1000, ["wpctl", "get-volume", "@DEFAULT_AUDIO_SINK@"]);
+    const batteryRaw = Variable("").poll(5000, ["sh", "-c", "echo \"$(cat /sys/class/power_supply/BAT0/capacity 2>/dev/null || echo 0) $(cat /sys/class/power_supply/BAT0/status 2>/dev/null || echo Unknown)\""]);
+    const wifiRaw = Variable("").poll(5000, ["sh", "-c", "nmcli -t -f ACTIVE,SSID dev wifi 2>/dev/null | grep '^yes' | cut -d: -f2 || true"]);
+    const cpuRaw = Variable("").poll(2000, ["sh", "-c", "top -bn1 | grep 'Cpu(s)' | sed 's/.*, *\\([0-9.]*\\)%* id.*/\\1/' | awk '{print 100 - $1}'"]);
+    const ramRaw = Variable("").poll(2000, ["sh", "-c", "free -m | awk '/Mem:/ {printf \"%d\", $3/$2*100}'"]);
+    const workspacesRaw = Variable("[]").poll(1000, ["sh", "-c", "niri msg -j workspaces 2>/dev/null || echo '[]'"]);
+
+    function Workspaces() {
+        return (
+            <box className="workspaces">
+                {bind(workspacesRaw).as(raw => {
+                    try {
+                        const list = JSON.parse(raw);
+                        if (!Array.isArray(list)) return [];
+                        list.sort((a, b) => a.idx - b.idx);
+                        return list.map(ws => {
+                            let className = "workspace-dot";
+                            if (ws.is_focused) className += " focused";
+                            else if (ws.active_window_id !== null) className += " active";
+                            
+                            let label = "•";
+                            if (ws.is_focused) label = "●";
+                            
+                            return (
+                                <button
+                                    className={className}
+                                    onClicked={() => {
+                                        execAsync(`niri msg action focus-workspace ` + ws.idx);
+                                    }}
+                                >
+                                    <label label={label} />
+                                </button>
+                            );
+                        });
+                    } catch (e) {
+                        return [<label label="•" />];
+                    }
+                })}
+            </box>
+        );
+    }
 
     function Bar(monitor = 0) {
-        const { TOP, LEFT, RIGHT } = Astal.WindowAnchor;
-
         return (
             <window
-                className="bar"
+                className="bar-window"
                 monitor={monitor}
-                exclusivity="exclusive"
-                anchor={TOP | LEFT | RIGHT}
+                exclusivity={Astal.Exclusivity.EXCLUSIVE}
+                anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.LEFT | Astal.WindowAnchor.RIGHT}
             >
-                <centerbox>
-                    <box className="left" hexpand={true} hpack="start">
-                        <label className="logo" label="❄️ NixOS" />
-                    </box>
-                    <box className="center" hexpand={true} hpack="center">
-                        <label className="clock" label={time()} />
-                    </box>
-                    <box className="right" hexpand={true} hpack="end">
-                        <label className="status" label="Active" />
-                    </box>
-                </centerbox>
+                <centerbox
+                    className="bar-container"
+                    startWidget={
+                        <box className="left-modules">
+                            <box className="module logo-module">
+                                <label className="logo" label="❄️ NixOS" />
+                            </box>
+                            <Workspaces />
+                        </box>
+                    }
+                    centerWidget={
+                        <box className="center-modules">
+                            <box className="module clock-module">
+                                <label className="clock" label={bind(time)} />
+                            </box>
+                        </box>
+                    }
+                    endWidget={
+                        <box className="right-modules">
+                            <box className="module cpu-ram-module">
+                                <label className="cpu" label={bind(cpuRaw).as(c => `󰍛 ` + c.trim() + `%`)} />
+                                <label className="ram" label={bind(ramRaw).as(r => ` 󰘚 ` + r.trim() + `%`)} />
+                            </box>
+                            <box className="module wifi-module">
+                                <label className="wifi" label={bind(wifiRaw).as(w => {
+                                    const ssid = w.trim();
+                                    return ssid ? `󰤨 ` + ssid : "󰤮 Disconnected";
+                                })} />
+                            </box>
+                            <box className="module volume-module">
+                                <label className="volume" label={bind(volumeRaw).as(v => {
+                                    if (!v) return "󰕾 --%";
+                                    if (v.includes("[MUTED]")) return "󰝟 Muted";
+                                    const num = parseFloat(v.replace("Volume: ", "").trim());
+                                    const pct = Math.round(num * 100);
+                                    let icon = "󰕾";
+                                    if (pct === 0) icon = "󰝟";
+                                    else if (pct < 30) icon = "󰕿";
+                                    else if (pct < 70) icon = "󰖀";
+                                    return icon + ` ` + pct + `%`;
+                                })} />
+                            </box>
+                            <box className="module battery-module">
+                                <label className="battery" label={bind(batteryRaw).as(b => {
+                                    if (!b) return "󰂎 --%";
+                                    const parts = b.split(" ");
+                                    const cap = parseInt(parts[0]);
+                                    const status = parts[1] ? parts[1].trim() : "";
+                                    let icon = "󰁹";
+                                    if (status === "Charging") {
+                                        icon = "󰂄";
+                                    } else {
+                                        if (cap < 10) icon = "󰁺";
+                                        else if (cap < 20) icon = "󰁻";
+                                        else if (cap < 30) icon = "󰁼";
+                                        else if (cap < 40) icon = "󰁽";
+                                        else if (cap < 50) icon = "󰁾";
+                                        else if (cap < 60) icon = "󰁿";
+                                        else if (cap < 70) icon = "󰂀";
+                                        else if (cap < 80) icon = "󰂁";
+                                        else if (cap < 90) icon = "󰂂";
+                                    }
+                                    return icon + ` ` + cap + `%`;
+                                })} />
+                            </box>
+                        </box>
+                    }
+                />
             </window>
         );
     }
 
     App.start({
-        css: App.configDir + "/style.css",
+        css: "/home/gian/.config/ags/style.css",
         main: () => {
             App.add_window(Bar(0));
         }
@@ -325,34 +420,107 @@
   '';
 
   xdg.configFile."ags/style.css".text = ''
-    label {
-        font-family: "CaskaydiaCove Nerd Font";
+    * {
+        font-family: "CaskaydiaCove Nerd Font", sans-serif;
         font-size: 13px;
     }
 
-    window.bar {
-        background-color: #1e1e2e;
-        border-bottom: 2px solid #cba6f7;
+    window {
+        background-color: transparent;
+        background: none;
+    }
+
+    .bar-container {
+        background-color: rgba(30, 30, 46, 0.85);
+        border: 1px solid #313244;
+        border-radius: 12px;
+        margin: 8px 12px 0 12px;
+        padding: 4px 8px;
+        color: #cdd6f4;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .module {
+        background-color: #181825;
+        border: 1px solid #313244;
+        border-radius: 8px;
+        padding: 4px 12px;
+        margin: 2px 4px;
         color: #cdd6f4;
     }
 
-    .logo {
+    .logo-module {
+        background-color: rgba(137, 180, 250, 0.15);
+        border-color: #89b4fa;
         color: #89b4fa;
         font-weight: bold;
-        margin-left: 20px;
-        padding: 8px 0;
+    }
+
+    .logo {
+        font-weight: bold;
+        color: #89b4fa;
+    }
+
+    .workspaces {
+        margin-left: 4px;
+    }
+
+    button.workspace-dot {
+        background: none;
+        border: none;
+        box-shadow: none;
+        padding: 0 4px;
+        margin: 0;
+        color: #45475a;
+    }
+
+    button.workspace-dot:hover {
+        color: #f5c2e7;
+    }
+
+    button.workspace-dot.active {
+        color: #b4befe;
+    }
+
+    button.workspace-dot.focused {
+        color: #cba6f7;
+    }
+
+    .clock-module {
+        background-color: rgba(245, 194, 231, 0.15);
+        border-color: #f5c2e7;
+        color: #f5c2e7;
+        font-weight: bold;
     }
 
     .clock {
-        color: #f5c2e7;
         font-weight: bold;
-        padding: 8px 0;
+        color: #f5c2e7;
     }
 
-    .status {
+    .cpu-ram-module {
+        color: #f9e2af;
+    }
+
+    .cpu {
+        color: #f9e2af;
+        margin-right: 8px;
+    }
+
+    .ram {
+        color: #f38ba8;
+    }
+
+    .wifi-module {
+        color: #89dceb;
+    }
+
+    .volume-module {
         color: #a6e3a1;
-        margin-right: 20px;
-        padding: 8px 0;
+    }
+
+    .battery-module {
+        color: #fab387;
     }
   '';
 }
