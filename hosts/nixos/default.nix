@@ -86,7 +86,7 @@
   users.users."gian" = {
     isNormalUser = true;
     description = "Gian";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "video" "render" ];
     shell = pkgs.zsh;
     packages = with pkgs; [
       kdePackages.kate
@@ -156,6 +156,10 @@
      lsd
      starship
      fastfetch
+     blender
+     obs-studio
+     davinci-resolve
+     clinfo
   ];
   
   fonts.packages = with pkgs; [
@@ -189,6 +193,15 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+  # Enable hardware graphics acceleration and OpenCL support for AMD GPU
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      rocmPackages.clr
+      rocmPackages.clr.icd
+    ];
+  };
+
   system.stateVersion = "26.05"; # Did you read the comment?
 
   # Automatically backup conflicting files when Home Manager switches
