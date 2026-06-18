@@ -40,6 +40,10 @@
     nil
     nixd
 
+    # Terminal UI tools for development
+    lazydocker
+    lazysql
+
     # Zen Browser (installed from community flake input)
     inputs.zen-browser.packages.${pkgs.system}.default
   ];
