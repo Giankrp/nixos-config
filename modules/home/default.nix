@@ -36,6 +36,10 @@
     tailwindcss-language-server
     angular-language-server
 
+    # Nix language servers
+    nil
+    nixd
+
     # Zen Browser (installed from community flake input)
     inputs.zen-browser.packages.${pkgs.system}.default
   ];
