@@ -16,22 +16,42 @@
   };
 
   outputs = { self, nixpkgs, home-manager, catppuccin, ... }@inputs: {
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [
-        ./hosts/nixos/default.nix
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = { inherit inputs; };
-          home-manager.users.gian = import ./modules/home/default.nix;
-          home-manager.sharedModules = [
-            catppuccin.homeModules.catppuccin
-            inputs.spicetify-nix.homeManagerModules.default
-          ];
-        }
-      ];
+    nixosConfigurations = {
+      desktop = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./hosts/desktop/default.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = { inherit inputs; };
+            home-manager.users.gian = import ./modules/home/default.nix;
+            home-manager.sharedModules = [
+              catppuccin.homeModules.catppuccin
+              inputs.spicetify-nix.homeManagerModules.default
+            ];
+          }
+        ];
+      };
+
+      laptop = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./hosts/laptop/default.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = { inherit inputs; };
+            home-manager.users.gian = import ./modules/home/default.nix;
+            home-manager.sharedModules = [
+              catppuccin.homeModules.catppuccin
+              inputs.spicetify-nix.homeManagerModules.default
+            ];
+          }
+        ];
+      };
     };
   };
 }
