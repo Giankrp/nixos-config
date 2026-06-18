@@ -2,18 +2,20 @@
 
 Este repositorio contiene la configuración declarativa y reproducible de NixOS utilizando **Nix Flakes**, **Home Manager**, el compositor Wayland **Niri** y **AGS** (Aylur's GTK Shell) para la barra de estado.
 
+---
+
 ## 📁 Estructura del Proyecto
 
-*   `flake.nix`: Definición de entradas, salidas y dependencias del sistema.
-*   `hosts/nixos/`: Configuraciones específicas a nivel de sistema.
-    *   `default.nix`: Configuración general del sistema (usuarios, servicios, redes, etc.).
-    *   `hardware-configuration.nix`: Configuración de hardware específica del dispositivo actual.
-*   `modules/home/`: Configuración a nivel de usuario (Home Manager).
-    *   `default.nix`: Inicialización y mapeo de configuraciones (Zsh, Tmux, Kitty, AGS).
-    *   `niri.kdl`: Configuración del compositor de ventanas Niri.
-    *   `ags/`: Configuración modular de la barra de estado.
-        *   `app.js`: Lógica y estructura de los widgets de AGS en Javascript.
-        *   `style.css`: Estilos de los widgets en CSS de GTK3 (Catppuccin Mocha).
+*   `flake.nix`: Definición de entradas, salidas y dependencias (Nixpkgs Unstable, Catppuccin, Spicetify, Zen Browser).
+*   `hosts/nixos/`: Configuraciones del sistema base para el host actual.
+    *   `default.nix`: Configuración general del sistema (usuarios, grupos, servicios de audio, Docker, etc.).
+    *   `hardware-configuration.nix`: Especificación del hardware (discos, CPU, GPU, controladores de arranque).
+*   `modules/home/`: Configuración del entorno de usuario administrada por Home Manager.
+    *   `default.nix`: Activación de programas principales (Git, Lazygit, Kitty, Direnv, Mako, Zed).
+    *   `niri.kdl`: Configuración del compositor de mosaico dinámico Niri.
+    *   `tmux.conf`: Configuración del multiplexor de terminal Tmux (Catppuccin Mocha).
+    *   `ags/`: Barra de estado modular en Javascript (AGS) con widgets.
+    *   `fastfetch/`: Logotipo ASCII y configuración modular de telemetría Fastfetch.
 
 ---
 
@@ -35,7 +37,8 @@ sudo nixos-generate-config --show-hardware-config > /etc/nixos/hosts/nixos/hardw
 ```
 
 ### 3. Registrar el nuevo archivo en Git
-**¡Crucial!** Nix Flakes ignora cualquier archivo que no esté rastreado por Git. Añade la nueva configuración de hardware al repositorio:
+> [!IMPORTANT]
+> Nix Flakes ignora cualquier archivo que no esté rastreado por Git. Añade la nueva configuración de hardware al repositorio antes de compilar:
 ```bash
 sudo git -C /etc/nixos add -f hosts/nixos/hardware-configuration.nix
 ```
@@ -49,17 +52,80 @@ sudo nixos-rebuild switch --flake /etc/nixos#nixos
 
 ---
 
+## 💻 Gestión de Múltiples Máquinas (Multi-Host)
+
+Si deseas tener dos o más máquinas (por ejemplo, tu PC de Escritorio y tu Portátil) compartiendo el mismo repositorio sin que sus archivos de hardware entren en conflicto, sigue esta estructura recomendada:
+
+### 1. Estructura de carpetas por hostname
+Renombra la carpeta `hosts/nixos` según el hostname de cada máquina:
+```
+hosts/
+├── pc-escritorio/
+│   ├── default.nix
+│   └── hardware-configuration.nix
+└── portatil/
+    ├── default.nix
+    └── hardware-configuration.nix
+```
+
+### 2. Actualizar `flake.nix`
+Declara ambos hosts en la sección `outputs` de tu `flake.nix`:
+```nix
+outputs = { self, nixpkgs, home-manager, ... }@inputs: {
+  nixosConfigurations = {
+    # Configuración de tu PC de Escritorio
+    pc-escritorio = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [
+        ./hosts/pc-escritorio/default.nix
+        home-manager.nixosModules.home-manager
+        {
+          home-manager.users.gian = import ./modules/home/default.nix;
+          home-manager.extraSpecialArgs = { inherit inputs; };
+        }
+      ];
+    };
+
+    # Configuración de tu Portátil
+    portatil = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [
+        ./hosts/portatil/default.nix
+        home-manager.nixosModules.home-manager
+        {
+          home-manager.users.gian = import ./modules/home/default.nix;
+          home-manager.extraSpecialArgs = { inherit inputs; };
+        }
+      ];
+    };
+  };
+};
+```
+*De este modo, ambas máquinas cargarán su hardware respectivo, pero compartirán el mismo módulo común de usuario (`modules/home/default.nix`).*
+
+### 3. Reconstruir según la máquina activa
+* En tu PC de escritorio ejecuta:
+  ```bash
+  sudo nixos-rebuild switch --flake /etc/nixos#pc-escritorio
+  ```
+* En tu portátil ejecuta:
+  ```bash
+  sudo nixos-rebuild switch --flake /etc/nixos#portatil
+  ```
+
+---
+
 ## 🛠️ Mantenimiento y Modificaciones
 
-Cada vez que realices cambios en los archivos de configuración (por ejemplo, en `app.js` o `style.css`), debes seguir estos pasos para aplicarlos:
+Cada vez que realices cambios en los archivos de configuración, debes seguir estos pasos para aplicarlos:
 
-1.  Asegúrate de registrar cualquier cambio en Git (Nix Flakes lo requiere):
+1.  Asegúrate de registrar cualquier cambio nuevo en Git (Nix Flakes lo requiere):
     ```bash
-    sudo git -C /etc/nixos add -u
+    sudo git -C /etc/nixos add -A
     ```
 2.  Reconstruye tu sistema NixOS:
     ```bash
-    sudo nixos-rebuild switch --flake /etc/nixos
+    sudo nixos-rebuild switch --flake /etc/nixos#nixos
     ```
 3.  Reinicia el servicio de AGS para ver los cambios aplicados en la barra de estado:
     ```bash
