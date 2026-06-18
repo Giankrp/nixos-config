@@ -12,6 +12,7 @@
       url = "github:Gerg-L/spicetify-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    zen-browser.url = "github:youwen5/zen-browser-flake";
   };
 
   outputs = { self, nixpkgs, home-manager, catppuccin, ... }@inputs: {

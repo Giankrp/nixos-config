@@ -35,6 +35,9 @@
     vue-language-server
     tailwindcss-language-server
     angular-language-server
+
+    # Zen Browser (installed from community flake input)
+    inputs.zen-browser.packages.${pkgs.system}.default
   ];
 
   # Add directories to PATH
@@ -645,23 +648,15 @@
         context = "VimControl && !menu";
         bindings = {
           "space c r" = "editor::Rename";
+          "space c a" = "editor::ToggleCodeActions";
+          "space t" = "terminal_panel::ToggleFocus";
+          "space c d" = "diagnostics::ToggleFocus";
+          "[ d" = "editor::GoToPrevDiagnostic";
+          "] d" = "editor::GoToNextDiagnostic";
+          "space e" = "project_panel::ToggleFocus";
         };
-      }
-      {
-        context = "VimControl && !menu";
         unbind = {
           "g r n" = "editor::Rename";
-        };
-      }
-      {
-        context = "VimControl && !menu";
-        bindings = {
-          "space c a" = "editor::ToggleCodeActions";
-        };
-      }
-      {
-        context = "VimControl && !menu";
-        unbind = {
           "g ." = "editor::ToggleCodeActions";
         };
       }
@@ -746,6 +741,12 @@
         context = "Workspace";
         unbind = {
           "ctrl-shift-ç" = "agent::ToggleFocus";
+        };
+      }
+      {
+        context = "Workspace";
+        bindings = {
+          "ctrl-`" = "terminal_panel::ToggleFocus";
         };
       }
     ];
