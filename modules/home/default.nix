@@ -29,20 +29,32 @@
     gopls
     golangci-lint
     gofumpt
+    air
+    sqlc
 
-    # Web development language servers (LSP/Formatters/Linters)
+    # Web development tools (LSPs, Linters, Formatters)
     vtsls
     vue-language-server
     tailwindcss-language-server
     angular-language-server
+    prettier
+    oxlint
+    oxfmt
+    eslint
 
-    # Nix language servers
+    # Nix development tools
     nil
     nixd
+    nixfmt-rfc-style
+    nix-tree
 
-    # Terminal UI tools for development
+    # Terminal UI and general CLI development tools
     lazydocker
     lazysql
+    jq
+    yq-go
+    shellcheck
+    shfmt
 
     # Zen Browser (installed from community flake input)
     inputs.zen-browser.packages.${pkgs.system}.default
