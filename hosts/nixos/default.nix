@@ -86,7 +86,7 @@
   users.users."gian" = {
     isNormalUser = true;
     description = "Gian";
-    extraGroups = [ "networkmanager" "wheel" "video" "render" ];
+    extraGroups = [ "networkmanager" "wheel" "video" "render" "docker" ];
     shell = pkgs.zsh;
     packages = with pkgs; [
       kdePackages.kate
@@ -144,6 +144,7 @@
      gnumake
      tree-sitter
      docker
+     docker-compose
      python3
      go
      nodejs
@@ -193,6 +194,8 @@
   programs.niri.enable = true;
 
   programs.zsh.enable = true;
+
+  virtualisation.docker.enable = true;
 
   # List services that you want to enable:
 

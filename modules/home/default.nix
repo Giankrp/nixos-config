@@ -267,6 +267,12 @@
 }
   '';
 
+  # Direnv configuration for automatic environment loading (flakewise)
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
+
   # Git configuration managed by Home Manager
   programs.git = {
     enable = true;
