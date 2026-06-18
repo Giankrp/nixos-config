@@ -650,9 +650,9 @@
           "space c r" = "editor::Rename";
           "space c a" = "editor::ToggleCodeActions";
           "space t" = "terminal_panel::ToggleFocus";
-          "space c d" = "diagnostics::ToggleFocus";
+          "space c d" = "diagnostics::ToggleWarnings";
           "[ d" = "editor::GoToPrevDiagnostic";
-          "] d" = "editor::GoToNextDiagnostic";
+          "] d" = "editor::GoToDiagnostic";
           "space e" = "project_panel::ToggleFocus";
         };
         unbind = {
