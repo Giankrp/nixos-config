@@ -60,6 +60,7 @@
     vesktop
     mpv
     imv
+    obsidian
 
     # Zen Browser (installed from community flake input)
     inputs.zen-browser.packages.${pkgs.system}.default

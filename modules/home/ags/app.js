@@ -15,7 +15,7 @@ const mprisRaw = Variable("Stopped||").poll(2000, ["sh", "-c", "echo \"$(playerc
 const getAppIcon = (appId) => {
     if (!appId) return "󰖲";
     const id = appId.toLowerCase();
-    if (id.includes("firefox")) return "󰈹";
+    if (id.includes("firefox") || id.includes("zen")) return "󰈹";
     if (id.includes("chrome") || id.includes("chromium")) return "󰊯";
     if (id.includes("kitty") || id.includes("alacritty") || id.includes("terminal") || id.includes("wezterm")) return "";
     if (id.includes("code") || id.includes("visual-studio")) return "󰨞";
@@ -403,8 +403,8 @@ function AppLauncher(monitor = 0) {
 
 const getSavedWallpaper = () => {
     try {
-        const path = exec("cat /home/gian/.cache/ags/current_wallpaper.txt 2>/dev/null").trim();
-        if (path && exec(`test -f "${path}" && echo yes || echo no`).trim() === "yes") {
+        const path = exec(["sh", "-c", "cat /home/gian/.cache/ags/current_wallpaper.txt 2>/dev/null"]).trim();
+        if (path && exec(["sh", "-c", `test -f "${path}" && echo yes || echo no`]).trim() === "yes") {
             return path;
         }
     } catch (e) {}
@@ -415,7 +415,7 @@ const savedPath = getSavedWallpaper();
 const isSavedVideo = savedPath.endsWith(".mp4") || savedPath.endsWith(".mkv") || savedPath.endsWith(".webm") || savedPath.endsWith(".gif");
 
 if (isSavedVideo) {
-    execAsync(["sh", "-c", `pkill mpvpaper ; mpvpaper -p -o "no-audio --loop-playlist" '*' "${savedPath}"`]).catch(() => {});
+    execAsync(["sh", "-c", `sleep 1.5 && pkill mpvpaper ; mpvpaper -p -o "no-audio --loop-playlist" '*' "${savedPath}"`]).catch(() => {});
 }
 
 const currentWallpaper = Variable(isSavedVideo ? "" : savedPath);
