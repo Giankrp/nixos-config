@@ -56,6 +56,11 @@
     shellcheck
     shfmt
 
+    # Desktop and Multimedia applications
+    discord
+    mpv
+    imv
+
     # Zen Browser (installed from community flake input)
     inputs.zen-browser.packages.${pkgs.system}.default
   ];
