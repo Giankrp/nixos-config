@@ -61,6 +61,7 @@
     mpv
     imv
     obsidian
+    pavucontrol
 
     # Zen Browser (installed from community flake input)
     inputs.zen-browser.packages.${pkgs.system}.default
