@@ -96,9 +96,14 @@
     };
 
     initContent = ''
-      eval "$(starship init zsh)"
       fastfetch
     '';
+  };
+
+  # Starship prompt configuration managed by Home Manager
+  programs.starship = {
+    enable = true;
+    settings = builtins.fromTOML (builtins.readFile ./starship.toml);
   };
 
   # Tmux configuration
