@@ -57,7 +57,7 @@
     shfmt
 
     # Desktop and Multimedia applications
-    discord
+    vesktop
     mpv
     imv
 
