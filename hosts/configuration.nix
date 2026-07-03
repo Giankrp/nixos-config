@@ -117,6 +117,10 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.permittedInsecurePackages = [
+    "pnpm-10.34.0"
+    "pnpm-10.29.2"
+  ];
 
   nix.settings = {
 	experimental-features = [
