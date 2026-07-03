@@ -55,6 +55,7 @@
     yq-go
     shellcheck
     shfmt
+    just
 
     # Desktop and Multimedia applications
     vesktop
@@ -124,6 +125,10 @@
   xdg.configFile."fastfetch/logo.txt".source = ./fastfetch/logo.txt;
 
   xdg.configFile."fastfetch/config.jsonc".source = ./fastfetch/config.jsonc;
+
+  # OpenCode configuration
+  xdg.configFile."opencode/opencode.jsonc".source = ./. + "/Gian agent.json";
+  xdg.configFile."opencode/AGENTS.md".source = ./AGENTS.md;
 
   # Direnv configuration for automatic environment loading (flakewise)
   programs.direnv = {

@@ -72,6 +72,26 @@
     # use the example session manager (no others are packaged yet so this is enabled by default,
     # no need to redefine it in your config for now)
     #media-session.enable = true;
+
+    wireplumber.extraConfig = {
+      "51-hdmi-force-profile" = {
+        "monitor.alsa.rules" = [
+          {
+            matches = [
+              {
+                "device.name" = "~alsa_card.pci.*";
+                "device.description" = "~.*HDMI.*";
+              }
+            ];
+            actions = {
+              update-props = {
+                "device.profile" = "output:hdmi-stereo";
+              };
+            };
+          }
+        ];
+      };
+    };
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
@@ -210,8 +230,13 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   # Enable hardware graphics acceleration and OpenCL support for AMD GPU
+  boot.initrd.kernelModules = [ "amdgpu" ];
+  services.xserver.videoDrivers = [ "amdgpu" ];
+  hardware.enableRedistributableFirmware = true;
+
   hardware.graphics = {
     enable = true;
+    enable32Bit = true;
     extraPackages = with pkgs; [
       rocmPackages.clr
       rocmPackages.clr.icd
