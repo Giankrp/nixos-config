@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   # Bootloader.
@@ -210,6 +210,7 @@
   #   enableSSHSupport = true;
   # };
   programs.niri.enable = true;
+  programs.niri.package = inputs.niri-flake.packages.${pkgs.stdenv.hostPlatform.system}.niri-stable;
 
   programs.zsh.enable = true;
 
