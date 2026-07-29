@@ -483,8 +483,12 @@ binds {
     // Alternatively, there are commands to move just a single window:
     // Mod+Ctrl+1 { move-window-to-workspace 1; }
 
-    // Switches focus between the current and the previous workspace.
-    // Mod+Tab { focus-workspace-previous; }
+    // Switches focus between columns/windows.
+    Alt+Tab { focus-column-right; }
+    Alt+Shift+Tab { focus-column-left; }
+    Ctrl+Tab { focus-column-right; }
+    Ctrl+Shift+Tab { focus-column-left; }
+    Mod+Tab { focus-window-down-or-column-right; }
 
     // The following binds move the focused window in and out of a column.
     // If the window is alone, they will consume it into the nearby column to the side.
