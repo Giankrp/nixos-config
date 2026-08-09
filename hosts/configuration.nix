@@ -44,6 +44,7 @@
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
+  services.displayManager.defaultSession = pkgs.lib.mkForce "plasma";
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -114,6 +115,16 @@
 
   # Install firefox.
   programs.firefox.enable = true;
+
+  # XDG Desktop Portal for File/Folder Picker Dialogs (Zed, Zen Browser, GTK/Qt apps)
+  xdg.portal = {
+    enable = true;
+    extraPortals = [
+      pkgs.xdg-desktop-portal-gtk
+      pkgs.kdePackages.xdg-desktop-portal-kde
+    ];
+    config.common.default = "*";
+  };
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -210,7 +221,6 @@
   #   enableSSHSupport = true;
   # };
   programs.niri.enable = true;
-  programs.niri.package = inputs.niri-flake.packages.${pkgs.stdenv.hostPlatform.system}.niri-stable;
 
   programs.zsh.enable = true;
 

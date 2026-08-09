@@ -32,7 +32,6 @@
         specialArgs = { inherit inputs; };
         modules = [
           ./hosts/desktop/default.nix
-          inputs.niri-flake.nixosModules.niri
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
