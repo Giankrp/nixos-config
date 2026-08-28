@@ -7,7 +7,7 @@
 {
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
-  boot.loader.systemd-boot.configurationLimit = 5;
+  boot.loader.systemd-boot.configurationLimit = 3;
   boot.loader.efi.canTouchEfiVariables = true;
 
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -128,17 +128,20 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.permittedInsecurePackages = [
-    "pnpm-10.34.0"
-    "pnpm-10.29.2"
-  ];
 
   nix.settings = {
-	experimental-features = [
-	   "nix-command"
-	   "flakes"	   
-	];
-};
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+    auto-optimise-store = true;
+  };
+
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 7d";
+  };
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.sessionVariables = {
