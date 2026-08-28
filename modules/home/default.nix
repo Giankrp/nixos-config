@@ -335,6 +335,59 @@
           info = "#cba6f7";
           border = "#1e1e2e";
           "border.variant" = "#1e1e2e";
+          syntax = {
+            keyword = {
+              font_style = "italic";
+            };
+            "keyword.control" = {
+              font_style = "italic";
+            };
+            "keyword.control.conditional" = {
+              font_style = "italic";
+            };
+            "keyword.control.repeat" = {
+              font_style = "italic";
+            };
+            "keyword.control.return" = {
+              font_style = "italic";
+            };
+            "keyword.function" = {
+              font_style = "italic";
+            };
+            "keyword.operator" = {
+              font_style = "normal";
+            };
+            "keyword.storage" = {
+              font_style = "italic";
+            };
+            "keyword.storage.type" = {
+              font_style = "italic";
+            };
+            "keyword.type" = {
+              font_style = "italic";
+            };
+            comment = {
+              font_style = "italic";
+            };
+            "comment.doc" = {
+              font_style = "italic";
+            };
+            type = {
+              font_style = "italic";
+            };
+            "type.builtin" = {
+              font_style = "italic";
+            };
+            boolean = {
+              font_style = "italic";
+            };
+            null = {
+              font_style = "italic";
+            };
+            self = {
+              font_style = "italic";
+            };
+          };
         };
       };
       scrollbar = {
