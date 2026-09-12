@@ -223,6 +223,7 @@
       "vue"
       "html"
       "tailwind"
+      "crystal"
     ];
 
     userSettings = {
@@ -545,6 +546,10 @@
         };
         HTML = {
           language_servers = [ "angular" "..." ];
+        };
+        Crystal = {
+          language_servers = [ "crystalline" ];
+          format_on_save = "on";
         };
       };
     };

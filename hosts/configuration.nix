@@ -222,6 +222,11 @@
      clinfo
      zed-editor-fhs
      opencode
+     pkg-config
+     crystal
+     shards
+     crystalline
+     ameba
   ];
   
   fonts.packages = with pkgs; [
