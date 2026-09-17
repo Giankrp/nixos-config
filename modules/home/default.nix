@@ -275,7 +275,7 @@
         bold_folder_labels = false;
         auto_fold_dirs = false;
         auto_reveal_entries = true;
-        folder_icons = true;
+        folder_indicator = "icon";
         diagnostic_badges = true;
         git_status_indicator = true;
         dock = "right";

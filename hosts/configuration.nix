@@ -137,6 +137,44 @@
             outputHash = "sha256-+3SB32EHpH9/0hM3h8CrO6f7V4ZAmxUFh3P8m6QDeO0=";
           }) args;
       };
+
+      crystal = prev.stdenv.mkDerivation rec {
+        pname = "crystal";
+        version = "1.21.0";
+        src = prev.fetchurl {
+          url = "https://github.com/crystal-lang/crystal/releases/download/${version}/crystal-${version}-1-linux-x86_64.tar.gz";
+          hash = "sha256-dEVh7jzuGwbRBs+a6ZuAZLTgF1GKxBTW3SPPr+NlYMk=";
+        };
+        nativeBuildInputs = [ prev.makeWrapper ];
+        dontBuild = true;
+        installPhase = ''
+          mkdir -p $out
+          cp -r bin lib share $out/
+          wrapProgram $out/bin/crystal \
+            --prefix PATH : ${prev.lib.makeBinPath [ prev.gcc prev.pkg-config ]} \
+            --set-default CRYSTAL_PATH "lib:$out/share/crystal/src"
+          wrapProgram $out/bin/shards \
+            --prefix PATH : ${prev.lib.makeBinPath [ prev.git ]}
+        '';
+      };
+
+      shards = final.crystal;
+
+      crystalline = prev.stdenv.mkDerivation rec {
+        pname = "crystalline";
+        version = "0.19.0";
+        src = prev.fetchurl {
+          url = "https://github.com/elbywan/crystalline/releases/download/v${version}/crystalline_x86_64-unknown-linux-musl.gz";
+          hash = "sha256-T5F4XuLbhZ9bS8+PiHaHaWvBwpBbqe9UYqkitUtoIW4=";
+        };
+        nativeBuildInputs = [ prev.gzip ];
+        dontUnpack = true;
+        installPhase = ''
+          mkdir -p $out/bin
+          gzip -dc $src > $out/bin/crystalline
+          chmod +x $out/bin/crystalline
+        '';
+      };
     })
   ];
 
