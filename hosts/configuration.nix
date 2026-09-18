@@ -138,7 +138,7 @@
           }) args;
       };
 
-      crystal = prev.stdenv.mkDerivation rec {
+      crystal = (prev.stdenv.mkDerivation rec {
         pname = "crystal";
         version = "1.21.0";
         src = prev.fetchurl {
@@ -152,11 +152,21 @@
           cp -r bin lib share $out/
           wrapProgram $out/bin/crystal \
             --prefix PATH : ${prev.lib.makeBinPath [ prev.gcc prev.pkg-config ]} \
+            --prefix PKG_CONFIG_PATH : "/run/current-system/sw/lib/pkgconfig:/run/current-system/sw/share/pkgconfig" \
             --set-default CRYSTAL_PATH "lib:$out/share/crystal/src"
           wrapProgram $out/bin/shards \
             --prefix PATH : ${prev.lib.makeBinPath [ prev.git ]}
         '';
+        passthru = (prev.crystal.passthru or {}) // {
+          inherit (prev.crystal) buildCrystalPackage;
+        };
+      }) // {
+        inherit (prev.crystal) buildCrystalPackage;
       };
+
+      gi-crystal = prev.gi-crystal;
+
+      nodejs-slim_latest = prev.nodejs-slim;
 
       shards = final.crystal;
 
@@ -191,10 +201,14 @@
     dates = "weekly";
     options = "--delete-older-than 7d";
   };
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  environment.pathsToLink = [
+    "/include"
+  ];
+
   environment.sessionVariables = {
-	NIXOS_OZONE_WL = "1";
+    NIXOS_OZONE_WL = "1";
+    PKG_CONFIG_PATH = "/run/current-system/sw/lib/pkgconfig:/run/current-system/sw/share/pkgconfig";
+    GI_TYPELIB_PATH = "/run/current-system/sw/lib/girepository-1.0";
   };
   environment.systemPackages = with pkgs; [
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
@@ -265,6 +279,29 @@
      shards
      crystalline
      ameba
+
+     # GTK4 & WebKitGTK desarrollo de apps nativas
+     gtk4
+     gtk4.dev
+     libadwaita
+     libadwaita.dev
+     webkitgtk_6_0
+     webkitgtk_6_0.dev
+     glib
+     glib.dev
+     gobject-introspection
+     pango.dev
+     cairo.dev
+     gdk-pixbuf.dev
+     graphene.dev
+     harfbuzz.dev
+     libsoup_3.dev
+     vulkan-loader.dev
+     gsettings-desktop-schemas
+     blueprint-compiler
+     cambalache
+     icon-library
+     gi-crystal
   ];
   
   fonts.packages = with pkgs; [
