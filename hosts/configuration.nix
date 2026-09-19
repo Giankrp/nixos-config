@@ -209,6 +209,7 @@
     NIXOS_OZONE_WL = "1";
     PKG_CONFIG_PATH = "/run/current-system/sw/lib/pkgconfig:/run/current-system/sw/share/pkgconfig";
     GI_TYPELIB_PATH = "/run/current-system/sw/lib/girepository-1.0";
+    JAVA_HOME = "${pkgs.jdk25}/lib/openjdk";
   };
   environment.systemPackages = with pkgs; [
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
@@ -302,6 +303,9 @@
      cambalache
      icon-library
      gi-crystal
+
+     # Java & Build tools
+     maven
   ];
   
   fonts.packages = with pkgs; [
@@ -317,6 +321,11 @@
   programs.niri.enable = true;
 
   programs.zsh.enable = true;
+
+  programs.java = {
+    enable = true;
+    package = pkgs.jdk25;
+  };
 
   virtualisation.docker.enable = true;
 

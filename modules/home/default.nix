@@ -224,6 +224,7 @@
       "html"
       "tailwind"
       "crystal"
+      "java"
     ];
 
     userSettings = {
