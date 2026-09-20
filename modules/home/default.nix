@@ -324,8 +324,8 @@
         dark = "Catppuccin Latte";
       };
       vim_mode = true;
-      ui_font_size = 16;
-      buffer_font_size = 17;
+      ui_font_size = 15.5;
+      buffer_font_size = 16;
       theme = {
         mode = "dark";
         light = "Catppuccin Mocha";
@@ -399,8 +399,8 @@
       ui_font_family = "CaskaydiaCove Nerd Font";
       ui_font_weight = 700;
       buffer_font_family = "CaskaydiaCove Nerd Font";
-      buffer_font_weight = 900;
-      buffer_line_height = "comfortable";
+      buffer_font_weight = 600;
+      buffer_line_height = "standard";
       buffer_font_features = {
         calt = true;
         zero = true;
@@ -580,7 +580,7 @@
           "space c a" = "editor::ToggleCodeActions";
           "space t" = "terminal_panel::ToggleFocus";
           "space c d" = "diagnostics::ToggleWarnings";
-          "[ d" = "editor::GoToPrevDiagnostic";
+          "[ d" = "editor::GoToPreviousDiagnostic";
           "] d" = "editor::GoToDiagnostic";
           "space e" = "project_panel::ToggleFocus";
         };

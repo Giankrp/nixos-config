@@ -6,7 +6,8 @@
 - **Instrucciones mixtas:** Si la petición combina consulta y ejecución, resuelve primero la consulta y espera autorización explícita antes de editar.
 - **Ambigüedad:** Si falta contexto funcional o arquitectónico, DETENTE y pregunta antes de generar código.
 - **Cambios no triviales:** Si afecta múltiples módulos, contratos/APIs o arquitectura, presenta plan breve (archivos, riesgos, alternativas) y espera confirmación.
-- **Diff mínimo (YAGNI):** Haz el cambio más pequeño posible. Prohibido crear abstracciones no pedidas, refactorizar código ajeno o añadir mejoras "aprovechando el cambio".
+- **Diff mínimo y atomicidad:** Haz el cambio más pequeño posible en pasos atómicos (~50-150 líneas máx.). Prohibido crear abstracciones no pedidas, refactorizar código vecino o mezclar varias funcionalidades a la vez.
+- **Radio de impacto:** Si resolver la tarea requiere modificar otras funciones, firmas o módulos no contemplados originalmente, DETENTE e informa el impacto antes de editarlos.
 - **Protección de reglas y entorno:** Prohibido modificar configuraciones de OpenCode, reglas de agentes (`AGENTS.md`), `SPEC.md` o decisiones documentadas sin orden explícita. No toques archivos con cambios locales sin advertir el conflicto.
 - **Acciones críticas:** Requieren autorización previa: instalar dependencias, `git commit/push`, migraciones de BD, iniciar servicios o comandos destructivos (`rm`).
 
@@ -22,3 +23,11 @@
   1. Archivos modificados o creados.
   2. Comandos ejecutados y resultado de validación.
   3. Aspectos que quedaron sin verificar o pendientes.
+
+## 4. Autorización y Manejo de Decisiones
+- **Preguntas especulativas:** Preguntas como *"¿qué harías?"*, *"¿cómo lo harías?"* o *"¿por dónde empezar?"* son consultas. Prohibido ejecutar o editar archivos.
+- **Bloqueo ante preguntas abiertas:** Si un plan incluye preguntas, NO procedas con la implementación hasta recibir respuestas explícitas. Ante silencio o respuestas parciales, vuelve a preguntar; nunca asumas aprobación.
+- **Estructura de planes:** Todo plan debe separar explícitamente:
+  1. *Decisiones bloqueantes (requieren tu aprobación):* Versiones de librerías, esquemas de datos, APIs/contratos o credenciales.
+  2. *Defaults asumidos (rebatibles):* Nombres locales o detalles menores de implementación (listados claramente para que puedas objetarlos).
+- **Conflictos de entorno:** Si surgen incompatibilidades o fallos de build, expón las alternativas disponibles antes de aplicar cualquier cambio o ajuste forzado.
