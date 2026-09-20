@@ -31,3 +31,4 @@
   1. *Decisiones bloqueantes (requieren tu aprobación):* Versiones de librerías, esquemas de datos, APIs/contratos o credenciales.
   2. *Defaults asumidos (rebatibles):* Nombres locales o detalles menores de implementación (listados claramente para que puedas objetarlos).
 - **Conflictos de entorno:** Si surgen incompatibilidades o fallos de build, expón las alternativas disponibles antes de aplicar cualquier cambio o ajuste forzado.
+- **Sugerencia de Skills:** Si el proyecto carece de contexto de stack o una tarea compleja lo amerita, propone skills pertinentes (`autoskills` para el stack base o `skills.sh` para flujos específicos), detallando nombre, fuente y propósito para que el usuario las investigue. Prohibido descargar o instalar cualquier skill sin autorización explícita previa.
