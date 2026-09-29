@@ -67,7 +67,11 @@
   },
   "file_types": {
     "Angular": [
-      "*.html"
+      "*.component.html",
+      "*.ng.html",
+      "app.html",
+      "**/src/app/**/*.html",
+      "**/app/**/*.html"
     ]
   },
   "git_panel": {
