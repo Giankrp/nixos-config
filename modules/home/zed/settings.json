@@ -65,15 +65,6 @@
   "file_finder": {
     "modal_max_width": "xlarge"
   },
-  "file_types": {
-    "Angular": [
-      "*.component.html",
-      "*.ng.html",
-      "app.html",
-      "**/src/app/**/*.html",
-      "**/app/**/*.html"
-    ]
-  },
   "git_panel": {
     "dock": "right",
     "tree_view": true
@@ -163,7 +154,6 @@
       ],
       "language_servers": [
         "!typescript-language-server",
-        "angular",
         "vtsls"
       ],
       "prettier": {
@@ -258,16 +248,8 @@
             ":class='([^']*)'"
           ]
         },
-        "classAttributes": [
-          "class",
-          "className",
-          "ngClass",
-          "[class]"
-        ],
         "includeLanguages": {
-          "vue": "html",
-          "angular": "html",
-          "Angular": "html"
+          "vue": "html"
         }
       }
     },
