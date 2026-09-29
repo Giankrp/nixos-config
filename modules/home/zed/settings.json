@@ -104,7 +104,12 @@
             "{buffer_path}"
           ]
         }
-      }
+      },
+      "language_servers": [
+        "angular",
+        "tailwindcss-language-server",
+        "..."
+      ]
     },
     "Go": {
       "inlay_hints": {
@@ -253,8 +258,16 @@
             ":class='([^']*)'"
           ]
         },
+        "classAttributes": [
+          "class",
+          "className",
+          "ngClass",
+          "[class]"
+        ],
         "includeLanguages": {
-          "vue": "html"
+          "vue": "html",
+          "angular": "html",
+          "Angular": "html"
         }
       }
     },
