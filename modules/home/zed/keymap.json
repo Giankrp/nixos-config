@@ -1,0 +1,75 @@
+[
+  {
+    "bindings": {
+      "ctrl-alt-g": [
+        "agent::NewExternalAgentThread",
+        {
+          "agent": {
+            "custom": {
+              "name": "gemini"
+            }
+          }
+        }
+      ],
+      "space": "git_panel::OpenMenu"
+    }
+  },
+  {
+    "context": "!Editor && !Terminal",
+    "unbind": {
+      "space f": "file_finder::Toggle"
+    },
+    "bindings": {
+      "space space": "file_finder::Toggle"
+    }
+  },
+  {
+    "context": "(vim_mode == helix_normal || vim_mode == helix_select) && !menu",
+    "unbind": {
+      "space f": "file_finder::Toggle"
+    }
+  },
+  {
+    "bindings": {
+      "ctrl-alt-left": "workspace::SwapPaneLeft",
+      "ctrl-alt-right": "workspace::SwapPaneRight",
+      "ctrl-left": "workspace::ActivatePaneLeft",
+      "ctrl-right": "workspace::ActivatePaneRight",
+      "space g d": "editor::ToggleSplitDiff"
+    },
+    "context": "Editor"
+  },
+  {
+    "bindings": {
+      "[ d": "editor::GoToPreviousDiagnostic",
+      "] d": "editor::GoToDiagnostic",
+      "space c a": "editor::ToggleCodeActions",
+      "space c d": "diagnostics::ToggleWarnings",
+      "space c r": "editor::Rename",
+      "space e": "project_panel::ToggleFocus",
+      "space t": "terminal_panel::ToggleFocus"
+    },
+    "context": "VimControl && !menu",
+    "unbind": {
+      "g .": "editor::ToggleCodeActions",
+      "g r n": "editor::Rename"
+    }
+  },
+  {
+    "bindings": {
+      "space g g": "git_panel::ToggleFocus",
+      "space g c": "git_panel::Close",
+      "shift-space e": "workspace::ToggleRightDock",
+      "ctrl-alt-o": "workspace::NewFile",
+      "space a i": "agent::ToggleFocus",
+      "ctrl-`": "terminal_panel::ToggleFocus"
+    },
+    "context": "Workspace",
+    "unbind": {
+      "ctrl-shift-g": "git_panel::ToggleFocus",
+      "ctrl-alt-b": "workspace::ToggleRightDock",
+      "ctrl-n": "workspace::NewFile",
+      "ctrl-shift-ç": "agent::ToggleFocus"
+    }
+  }
+]
