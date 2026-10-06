@@ -376,6 +376,13 @@
     ];
   };
 
+  # Local LLM service with AMD ROCm GPU acceleration (Radeon RX 6600)
+  services.ollama = {
+    enable = true;
+    package = pkgs.ollama-rocm;
+    rocmOverrideGfx = "10.3.0";
+  };
+
   system.stateVersion = "26.05"; # Did you read the comment?
 
   # Automatically backup conflicting files when Home Manager switches
