@@ -6,7 +6,9 @@
     "dock": "right",
     "favorite_models": [],
     "model_parameters": [],
-    "sidebar_side": "left"
+    "threads_sidebar": {
+      "position": "left"
+    }
   },
   "agent_servers": {
     "antigravity-acp": {
