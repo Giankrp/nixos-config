@@ -1,0 +1,33 @@
+// Zellij configuration
+// https://zellij.dev/documentation/
+
+default_shell "zsh"
+pane_frames true
+mouse_mode true
+copy_command "wl-copy"
+copy_clipboard "system"
+copy_on_select true
+scroll_buffer_size 10000
+session_serialization true
+auto_layout true
+
+keybinds {
+    shared_except "tmux" "locked" {
+        bind "Ctrl Space" { SwitchToMode "Tmux"; }
+    }
+
+    shared_except "locked" {
+        // Tab navigation matching Alt+Shift+H / Alt+Shift+L
+        bind "Alt H" { GoToPreviousTab; }
+        bind "Alt L" { GoToNextTab; }
+
+        // Quick splits in normal mode
+        bind "Alt d" { NewPane "Down"; }
+        bind "Alt r" { NewPane "Right"; }
+    }
+
+    tmux {
+        bind "Ctrl Space" { Write 0; SwitchToMode "Normal"; }
+        bind "Esc" { SwitchToMode "Normal"; }
+    }
+}

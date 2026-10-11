@@ -104,6 +104,7 @@
       v = "nvim";
       gs = "git status";
       ls = "lsd";
+      zj = "zellij";
     };
 
     initContent = ''
@@ -128,6 +129,12 @@
     ];
 
     extraConfig = builtins.readFile ./tmux.conf;
+  };
+
+  # Zellij configuration
+  programs.zellij = {
+    enable = true;
+    extraConfig = builtins.readFile ./zellij/config.kdl;
   };
 
   # Fastfetch configuration and ASCII logo
