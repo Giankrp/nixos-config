@@ -216,6 +216,8 @@
       bold_italic_font = "auto";
       hide_window_decorations = "yes";
       shell = "zsh";
+      background_opacity = "0.90";
+      background_blur = 20;
     };
   };
 
