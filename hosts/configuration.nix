@@ -277,6 +277,7 @@
      clinfo
      zed-editor-fhs
      opencode
+     lsof
      pkg-config
      crystal
      shards
