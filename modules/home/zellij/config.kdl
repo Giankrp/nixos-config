@@ -2,7 +2,8 @@
 // https://zellij.dev/documentation/
 
 default_shell "zsh"
-pane_frames true
+default_layout "default"
+pane_frames false
 mouse_mode true
 copy_command "wl-copy"
 copy_clipboard "system"

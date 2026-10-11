@@ -135,7 +135,13 @@
   programs.zellij = {
     enable = true;
     extraConfig = builtins.readFile ./zellij/config.kdl;
+    layouts = {
+      default = ./zellij/layouts/default.kdl;
+    };
   };
+
+  # Zellij plugins
+  xdg.configFile."zellij/plugins/zjstatus.wasm".source = "${pkgs.zellijPlugins.zjstatus}";
 
   # Fastfetch configuration and ASCII logo
   xdg.configFile."fastfetch/logo.txt".source = ./fastfetch/logo.txt;

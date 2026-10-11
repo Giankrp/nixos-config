@@ -1,0 +1,80 @@
+layout {
+    default_tab_template {
+        children
+        pane size=1 borderless=true {
+            plugin location="file:/home/gian/.config/zellij/plugins/zjstatus.wasm" {
+                // Background & Separators
+                format_space "#[bg=#181825]"
+
+                // Sections
+                format_left   "{mode}#[bg=#181825]{tabs}"
+                format_center ""
+                format_right  "{command_git_branch}#[fg=#cba6f7,bg=#181825]#[fg=#11111b,bg=#cba6f7,bold] 󰆍 #[fg=#cdd6f4,bg=#313244,bold] {session} #[fg=#313244,bg=#181825] {datetime}"
+
+                // Dynamic frames: hide border when single pane, show when split
+                hide_frame_for_single_pane "true"
+
+                // Mode indicators (Catppuccin Mocha rounded pills)
+                mode_normal        "#[fg=#a6e3a1,bg=#181825]#[fg=#11111b,bg=#a6e3a1,bold]  NORMAL #[fg=#a6e3a1,bg=#181825] "
+                mode_tmux          "#[fg=#fab387,bg=#181825]#[fg=#11111b,bg=#fab387,bold]  TMUX #[fg=#fab387,bg=#181825] "
+                mode_locked        "#[fg=#f38ba8,bg=#181825]#[fg=#11111b,bg=#f38ba8,bold]  LOCKED #[fg=#f38ba8,bg=#181825] "
+                mode_pane          "#[fg=#89b4fa,bg=#181825]#[fg=#11111b,bg=#89b4fa,bold] 󰉈 PANE #[fg=#89b4fa,bg=#181825] "
+                mode_tab           "#[fg=#cba6f7,bg=#181825]#[fg=#11111b,bg=#cba6f7,bold] 󰓩 TAB #[fg=#cba6f7,bg=#181825] "
+                mode_scroll        "#[fg=#f9e2af,bg=#181825]#[fg=#11111b,bg=#f9e2af,bold] 󱕑 SCROLL #[fg=#f9e2af,bg=#181825] "
+                mode_enter_search  "#[fg=#f9e2af,bg=#181825]#[fg=#11111b,bg=#f9e2af,bold]  SEARCH #[fg=#f9e2af,bg=#181825] "
+                mode_search        "#[fg=#f9e2af,bg=#181825]#[fg=#11111b,bg=#f9e2af,bold]  SEARCH #[fg=#f9e2af,bg=#181825] "
+                mode_resize        "#[fg=#f9e2af,bg=#181825]#[fg=#11111b,bg=#f9e2af,bold] 󰩨 RESIZE #[fg=#f9e2af,bg=#181825] "
+                mode_session       "#[fg=#b4befe,bg=#181825]#[fg=#11111b,bg=#b4befe,bold] 󰆍 SESSION #[fg=#b4befe,bg=#181825] "
+                mode_move          "#[fg=#94e2d5,bg=#181825]#[fg=#11111b,bg=#94e2d5,bold] 󰆾 MOVE #[fg=#94e2d5,bg=#181825] "
+
+                // Tabs (inactive)
+                tab_normal              "#[fg=#45475a,bg=#181825]#[fg=#bac2de,bg=#45475a] {index} #[fg=#9399b2,bg=#313244] {name} #[fg=#313244,bg=#181825] "
+                tab_normal_fullscreen   "#[fg=#45475a,bg=#181825]#[fg=#bac2de,bg=#45475a] {index} #[fg=#9399b2,bg=#313244] {name} 󰊓 #[fg=#313244,bg=#181825] "
+                tab_normal_sync         "#[fg=#45475a,bg=#181825]#[fg=#bac2de,bg=#45475a] {index} #[fg=#9399b2,bg=#313244] {name} 󱍸 #[fg=#313244,bg=#181825] "
+
+                // Tabs (active)
+                tab_active              "#[fg=#89b4fa,bg=#181825]#[fg=#11111b,bg=#89b4fa,bold] {index} #[fg=#cdd6f4,bg=#313244,bold] {name} #[fg=#313244,bg=#181825] "
+                tab_active_fullscreen   "#[fg=#89b4fa,bg=#181825]#[fg=#11111b,bg=#89b4fa,bold] {index} #[fg=#cdd6f4,bg=#313244,bold] {name} 󰊓 #[fg=#313244,bg=#181825] "
+                tab_active_sync         "#[fg=#89b4fa,bg=#181825]#[fg=#11111b,bg=#89b4fa,bold] {index} #[fg=#cdd6f4,bg=#313244,bold] {name} 󱍸 #[fg=#313244,bg=#181825] "
+
+                // Git branch module (displays only when inside a git repository)
+                command_git_branch_command     "bash -c 'b=$(git branch --show-current 2>/dev/null); if [ -n \"$b\" ]; then echo -n \"#[fg=#a6e3a1,bg=#181825]#[fg=#11111b,bg=#a6e3a1,bold]  #[fg=#cdd6f4,bg=#313244,bold] $b #[fg=#313244,bg=#181825] \"; fi'"
+                command_git_branch_format      "{stdout}"
+                command_git_branch_interval    "2"
+                command_git_branch_rendermode  "dynamic"
+
+                // Datetime module
+                datetime          "#[fg=#74c7ec,bg=#181825]#[fg=#11111b,bg=#74c7ec,bold]  #[fg=#cdd6f4,bg=#313244,bold] {format} #[fg=#313244,bg=#181825]"
+                datetime_format   "%H:%M"
+                datetime_timezone "Europe/Madrid"
+            }
+        }
+    }
+
+    swap_tiled_layout name="vertical" {
+        tab max_panes=5 {
+            pane split_direction="vertical" {
+                pane
+                pane { children; }
+            }
+        }
+    }
+
+    swap_tiled_layout name="horizontal" {
+        tab max_panes=5 {
+            pane split_direction="horizontal" {
+                pane
+                pane { children; }
+            }
+        }
+    }
+
+    swap_tiled_layout name="stacked" {
+        tab min_panes=2 {
+            pane split_direction="vertical" {
+                pane size="65%"
+                pane stacked=true { children; }
+            }
+        }
+    }
+}
