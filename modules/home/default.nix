@@ -112,6 +112,7 @@
     };
 
     initContent = ''
+      unset LG_CONFIG_FILE
       fastfetch
     '';
   };
