@@ -131,13 +131,6 @@
 
   nixpkgs.overlays = [
     (final: prev: {
-      davinci-resolve = prev.davinci-resolve.override {
-        runCommandLocal = name: env: args:
-          prev.runCommandLocal name (env // {
-            outputHash = "sha256-+3SB32EHpH9/0hM3h8CrO6f7V4ZAmxUFh3P8m6QDeO0=";
-          }) args;
-      };
-
       crystal = (prev.stdenv.mkDerivation rec {
         pname = "crystal";
         version = "1.21.0";
