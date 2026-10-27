@@ -235,7 +235,7 @@
      docker
      docker-compose
      python3
-     go
+     go_latest
      nodejs
      pnpm
      postgresql
