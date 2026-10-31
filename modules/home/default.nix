@@ -20,9 +20,9 @@
   home.packages = with pkgs; [
     satty
     mpvpaper
-    (ags.override {
+    (inputs.ags.packages.${pkgs.system}.default.override {
       extraPackages = [
-        astal.apps
+        inputs.ags.packages.${pkgs.system}.apps
       ];
     })
 
