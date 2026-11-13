@@ -250,6 +250,7 @@
      fastfetch
      blender
      obs-studio
+     audacity
      (pkgs.lib.hiPrio (pkgs.writeShellScriptBin "davinci-resolve" ''
        export QT_QPA_PLATFORM=xcb
        export QT_PLUGIN_PATH=""
