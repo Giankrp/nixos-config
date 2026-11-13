@@ -270,6 +270,7 @@
      clinfo
      zed-editor-fhs
      opencode
+     uv
      lsof
      pkg-config
      crystal
