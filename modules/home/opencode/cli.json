@@ -1,0 +1,19 @@
+{
+  "$schema": "https://opencode.ai/v2/cli.json",
+  "theme": {
+    "name": "catppuccin"
+  },
+  "session": {
+    "sidebar": "hide",
+    "scrollbar": false,
+    "thinking": "hide",
+    "verbosity": "low"
+  },
+  "keybinds": {
+    "sidebar_toggle": "ctrl+s",
+    "dialog.mcp.toggle": "ctrl+m"
+  },
+  "plugins": [
+    "./herdr-opencode"
+  ]
+}

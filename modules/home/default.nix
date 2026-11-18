@@ -156,6 +156,7 @@
   # OpenCode configuration
   xdg.configFile."opencode/opencode.jsonc".source = ./. + "/Gian agent.json";
   xdg.configFile."opencode/AGENTS.md".source = ./AGENTS.md;
+  xdg.configFile."opencode/cli.json".source = ./opencode/cli.json;
 
   # Herdr configuration
   xdg.configFile."herdr/config.toml".source = ./herdr/config.toml;

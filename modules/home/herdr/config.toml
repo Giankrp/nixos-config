@@ -1,24 +1,52 @@
 # herdr configuration managed by Home Manager in NixOS
 onboarding = false
 
+# ── 1. TEMA Y COLORES (Catppuccin Mocha con transparencia) ───────────────────
 [theme]
 name = "catppuccin"
 
 [theme.custom]
-panel_bg = "reset"
-sidebar_bg = "#11111b"
-active_row_bg = "#313244"
-selection_bg = "#45475a"
-accent = "#cba6f7"
-green = "#a6e3a1"
-red = "#f38ba8"
+panel_bg = "reset"           # Fondo translúcido (usa el desenfoque de tu terminal)
+sidebar_bg = "#11111b"       # Crust oscuro
+active_row_bg = "#313244"    # Surface0
+selection_bg = "#45475a"     # Surface1
+accent = "#cba6f7"           # Mauve
+green = "#a6e3a1"            # Verde suave para agentes trabajando
+red = "#f38ba8"              # Rojo coral para agentes esperando input
+text = "#cdd6f4"             # Texto Catppuccin nítido
 
+# ── 2. ESTÉTICA DE LA INTERFAZ (Gaps, bordes y etiquetas) ───────────────────
 [ui]
 sidebar_width = 24
 sidebar_min_width = 16
 sidebar_max_width = 30
-sidebar_collapsed_mode = "compact"
+sidebar_start_collapsed = true
+sidebar_collapsed_mode = "hidden"
+hide_tab_bar_when_single_tab = true
 
+# Separación visual moderna entre paneles (como en Niri/Hyprland)
+pane_gaps = true
+pane_borders = "auto"
+pane_outer_borders = true
+
+# Etiquetas con el nombre del agente (OpenCode, Claude) en el borde del panel
+show_agent_labels_on_pane_borders = true
+
+# Elimina las barras de desplazamiento toscas
+pane_scrollbars = false
+
+# Iconos de estado con símbolos nítidos
+status_indicators = "symbols"
+
+# Creación de pestañas limpia e instantánea sin diálogos molestos
+prompt_new_tab_name = false
+
+# Reloj elegante en el extremo derecho de la barra superior
+tab_bar_right = [
+  { type = "datetime", format = "%H:%M" }
+]
+
+# ── 3. NOTIFICACIONES FLOTANTES (Toasts) ──────────────────────────────────────
 [ui.toast]
 delivery = "herdr"
 delay_seconds = 1
@@ -26,10 +54,12 @@ delay_seconds = 1
 [ui.toast.herdr]
 position = "bottom-right"
 
+# ── 4. TERMINAL Y GRÁFICOS ───────────────────────────────────────────────────
 [terminal]
 new_cwd = "follow"
 kitty_graphics = true
 
+# ── 5. ATAJOS DE TECLADO ─────────────────────────────────────────────────────
 [keys]
 prefix = "ctrl+b"
 
