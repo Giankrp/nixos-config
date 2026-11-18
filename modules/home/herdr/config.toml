@@ -62,42 +62,87 @@ kitty_graphics = true
 [keys]
 prefix = "ctrl+b"
 
-# Lazygit (Git TUI)
+# Lazygit (Git)
+[[keys.command]]
+key = "alt+g"
+type = "popup"
+command = "lazygit"
+description = "Lazygit (Git TUI)"
+width = "85%"
+height = "85%"
+
 [[keys.command]]
 key = "prefix+alt+g"
 type = "popup"
 command = "lazygit"
+description = "Lazygit (Git TUI)"
 width = "85%"
 height = "85%"
 
-# Lazydocker (Docker Containers TUI)
+# Lazydocker (Docker)
+[[keys.command]]
+key = "alt+d"
+type = "popup"
+command = "lazydocker"
+description = "Lazydocker (Contenedores)"
+width = "85%"
+height = "85%"
+
 [[keys.command]]
 key = "prefix+alt+d"
 type = "popup"
 command = "lazydocker"
+description = "Lazydocker (Contenedores)"
 width = "85%"
 height = "85%"
 
-# Lazysql (Database Manager TUI)
+# Lazysql (Bases de Datos)
+[[keys.command]]
+key = "alt+s"
+type = "popup"
+command = "lazysql"
+description = "Lazysql (Base de datos)"
+width = "85%"
+height = "85%"
+
 [[keys.command]]
 key = "prefix+alt+s"
 type = "popup"
 command = "lazysql"
+description = "Lazysql (Base de datos)"
 width = "85%"
 height = "85%"
 
-# Atac (REST API Client TUI)
+# Atac (Cliente REST API)
+[[keys.command]]
+key = "alt+a"
+type = "popup"
+command = "atac"
+description = "Atac (Cliente REST API)"
+width = "85%"
+height = "85%"
+
 [[keys.command]]
 key = "prefix+alt+a"
 type = "popup"
 command = "atac"
+description = "Atac (Cliente REST API)"
 width = "85%"
 height = "85%"
 
-# Yazi (File Manager TUI con previsualización)
+# Yazi (Gestor de archivos)
+[[keys.command]]
+key = "alt+y"
+type = "popup"
+command = "yazi"
+description = "Yazi (Explorador de archivos)"
+width = "85%"
+height = "85%"
+
 [[keys.command]]
 key = "prefix+alt+y"
 type = "popup"
 command = "yazi"
+description = "Yazi (Explorador de archivos)"
 width = "85%"
 height = "85%"
