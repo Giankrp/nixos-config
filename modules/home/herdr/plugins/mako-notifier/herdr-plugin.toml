@@ -1,0 +1,18 @@
+id = "mako-notifier"
+name = "Mako Agent Notifier"
+version = "0.1.0"
+min_herdr_version = "0.9.0"
+description = "Desktop notifications for Herdr agents via Mako and notify-send"
+platforms = ["linux"]
+
+[[build]]
+command = ["go", "build", "-o", "bin/mako-notifier", "main.go"]
+
+[[events]]
+on = "pane.agent_status_changed"
+command = ["./bin/mako-notifier"]
+
+[[actions]]
+id = "test"
+title = "Send Test Notification"
+command = ["./bin/mako-notifier", "--test"]

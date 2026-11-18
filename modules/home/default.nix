@@ -55,6 +55,7 @@
     # Terminal UI and general CLI development tools
     lazydocker
     lazysql
+    libnotify
     jq
     yq-go
     shellcheck

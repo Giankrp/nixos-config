@@ -1,0 +1,26 @@
+# ==============================================================================
+# Herdr Mako Notifier - Configuración Personalizable
+# ==============================================================================
+
+[general]
+# Si estás mirando activamente la terminal o panel del agente, no mandar notificación
+ignore_if_focused = true
+
+# Sonido (usando PipeWire pw-play o paplay)
+sound_enabled = false
+sound_blocked = "/run/current-system/sw/share/sounds/freedesktop/stereo/dialog-warning.oga"
+sound_done = "/run/current-system/sw/share/sounds/freedesktop/stereo/complete.oga"
+
+[blocked]
+# Urgencia crítica: en Mako se queda en pantalla hasta que hagas clic o la atiendas
+urgency = "critical"
+title = "⏳ {agent} necesita tu aprobación"
+body = "En [{workspace} > {tab}] · {title}"
+icon = "dialog-warning"
+
+[done]
+# Urgencia normal: desaparece a los pocos segundos automáticamente
+urgency = "normal"
+title = "✅ {agent} completó su tarea"
+body = "En [{workspace} > {tab}] · {title}"
+icon = "dialog-information"
