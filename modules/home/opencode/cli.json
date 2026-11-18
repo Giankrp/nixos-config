@@ -7,7 +7,12 @@
     "sidebar": "hide",
     "scrollbar": false,
     "thinking": "hide",
-    "verbosity": "low"
+    "verbosity": "medium",
+    "tps": true
+  },
+  "mini": {
+    "footer": "show",
+    "work_spinner": "density-wave"
   },
   "keybinds": {
     "sidebar_toggle": "ctrl+s",
