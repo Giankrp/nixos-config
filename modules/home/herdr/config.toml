@@ -69,3 +69,9 @@ type = "popup"
 command = "lazygit"
 width = "85%"
 height = "85%"
+
+[[keys.command]]
+key = "prefix+D"
+type = "shell"
+command = "herdr-dev-layout"
+description = "Crear layout asistido (Neovim 65% + OpenCode 35%) y pestaña Servers"

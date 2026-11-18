@@ -60,6 +60,7 @@
     shellcheck
     shfmt
     just
+    (pkgs.writeShellScriptBin "herdr-dev-layout" (builtins.readFile ./herdr/herdr-dev-layout.sh))
 
     # Desktop and Multimedia applications
     vesktop
@@ -156,7 +157,10 @@
   # OpenCode configuration
   xdg.configFile."opencode/opencode.jsonc".source = ./. + "/Gian agent.json";
   xdg.configFile."opencode/AGENTS.md".source = ./AGENTS.md;
-  xdg.configFile."opencode/cli.json".source = ./opencode/cli.json;
+  xdg.configFile."opencode/cli.json" = {
+    source = ./opencode/cli.json;
+    force = true;
+  };
 
   # Herdr configuration
   xdg.configFile."herdr/config.toml".source = ./herdr/config.toml;
