@@ -157,6 +157,9 @@
   xdg.configFile."opencode/opencode.jsonc".source = ./. + "/Gian agent.json";
   xdg.configFile."opencode/AGENTS.md".source = ./AGENTS.md;
 
+  # Herdr configuration
+  xdg.configFile."herdr/config.toml".source = ./herdr/config.toml;
+
   # Direnv configuration for automatic environment loading (flakewise)
   programs.direnv = {
     enable = true;

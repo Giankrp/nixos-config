@@ -1,0 +1,41 @@
+# herdr configuration managed by Home Manager in NixOS
+onboarding = false
+
+[theme]
+name = "catppuccin"
+
+[theme.custom]
+panel_bg = "reset"
+sidebar_bg = "#11111b"
+active_row_bg = "#313244"
+selection_bg = "#45475a"
+accent = "#cba6f7"
+green = "#a6e3a1"
+red = "#f38ba8"
+
+[ui]
+sidebar_width = 24
+sidebar_min_width = 16
+sidebar_max_width = 30
+sidebar_collapsed_mode = "compact"
+
+[ui.toast]
+delivery = "herdr"
+delay_seconds = 1
+
+[ui.toast.herdr]
+position = "bottom-right"
+
+[terminal]
+new_cwd = "follow"
+kitty_graphics = true
+
+[keys]
+prefix = "ctrl+b"
+
+[[keys.command]]
+key = "prefix+alt+g"
+type = "popup"
+command = "lazygit"
+width = "85%"
+height = "85%"
