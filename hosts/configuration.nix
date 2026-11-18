@@ -270,6 +270,7 @@
      clinfo
      zed-editor-fhs
      opencode
+     herdr
      uv
      lsof
      pkg-config
