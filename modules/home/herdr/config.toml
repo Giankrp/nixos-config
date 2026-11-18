@@ -58,10 +58,11 @@ position = "bottom-right"
 new_cwd = "follow"
 kitty_graphics = true
 
-# ── 5. ATAJOS DE TECLADO ─────────────────────────────────────────────────────
+# ── 5. ATAJOS DE TECLADO Y POPUPS FLOTANTES ──────────────────────────────────
 [keys]
 prefix = "ctrl+b"
 
+# Lazygit (Git TUI)
 [[keys.command]]
 key = "prefix+alt+g"
 type = "popup"
@@ -69,8 +70,34 @@ command = "lazygit"
 width = "85%"
 height = "85%"
 
+# Lazydocker (Docker Containers TUI)
 [[keys.command]]
-key = "prefix+D"
-type = "shell"
-command = "herdr-dev-layout"
-description = "Crear layout asistido (Neovim 65% + OpenCode 35%) y pestaña Servers"
+key = "prefix+alt+d"
+type = "popup"
+command = "lazydocker"
+width = "85%"
+height = "85%"
+
+# Lazysql (Database Manager TUI)
+[[keys.command]]
+key = "prefix+alt+s"
+type = "popup"
+command = "lazysql"
+width = "85%"
+height = "85%"
+
+# Atac (REST API Client TUI)
+[[keys.command]]
+key = "prefix+alt+a"
+type = "popup"
+command = "atac"
+width = "85%"
+height = "85%"
+
+# Yazi (File Manager TUI con previsualización)
+[[keys.command]]
+key = "prefix+alt+y"
+type = "popup"
+command = "yazi"
+width = "85%"
+height = "85%"
