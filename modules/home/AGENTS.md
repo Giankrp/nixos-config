@@ -32,3 +32,12 @@
   2. *Defaults asumidos (rebatibles):* Nombres locales o detalles menores de implementación (listados claramente para que puedas objetarlos).
 - **Conflictos de entorno:** Si surgen incompatibilidades o fallos de build, expón las alternativas disponibles antes de aplicar cualquier cambio o ajuste forzado.
 - **Sugerencia de Skills:** Si el proyecto carece de contexto de stack o una tarea compleja lo amerita, propone skills pertinentes (`autoskills` para el stack base o `skills.sh` para flujos específicos), detallando nombre, fuente y propósito para que el usuario las investigue. Prohibido descargar o instalar cualquier skill sin autorización explícita previa.
+
+## 5. Commits y Control de Versiones
+- **Petición explícita:** Prohibido hacer commits o push sin petición expresa del usuario.
+- **Un commit = una unidad funcional:** Atómico y autocontenido. Incluir tests junto con el código que prueban; separar documentación del código cuando sea posible.
+- **Formato:** Seguir la convención del proyecto (Conventional Commits) o `<scope>: <verbo en imperativo>`.
+- **Scope dinámico:** Se deduce del área o módulo modificado; prohibido usar listas rígidas. Si cruza áreas y no es separable, usar el área dominante y detallar en el cuerpo.
+- **Idioma y firma:** Español por defecto (o adaptarse al idioma predominante del repo en `git log -10`). Prohibido añadir `Co-Authored-By` o cualquier atribución de IA.
+- **Staging explícito:** Añadir archivos explícitamente o por hunks; NUNCA usar `git add .` ni `git add -A`. Revisar siempre `git diff --cached` antes de commitear.
+- **Hooks y Push:** Si un hook pre-commit falla o formatea, re-añadir los cambios; nunca usar `--no-verify`. NUNCA hacer push sin autorización previa.

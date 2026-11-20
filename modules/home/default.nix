@@ -158,10 +158,15 @@
   # OpenCode configuration
   xdg.configFile."opencode/opencode.jsonc".source = ./. + "/Gian agent.json";
   xdg.configFile."opencode/AGENTS.md".source = ./AGENTS.md;
+  xdg.configFile."opencode/skills/commits/SKILL.md".source = ./skills/commits/SKILL.md;
   xdg.configFile."opencode/cli.json" = {
     source = ./opencode/cli.json;
     force = true;
   };
+
+  # Antigravity CLI global rules & skills
+  home.file.".gemini/config/AGENTS.md".source = ./AGENTS.md;
+  home.file.".gemini/config/skills/commits/SKILL.md".source = ./skills/commits/SKILL.md;
 
   # Herdr configuration
   xdg.configFile."herdr/config.toml".source = ./herdr/config.toml;
