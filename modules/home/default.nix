@@ -164,8 +164,7 @@
     force = true;
   };
 
-  # Antigravity CLI global rules & skills
-  home.file.".gemini/config/AGENTS.md".source = ./AGENTS.md;
+  # Antigravity CLI global skills
   home.file.".gemini/config/skills/commits/SKILL.md".source = ./skills/commits/SKILL.md;
 
   # Herdr configuration
